@@ -1,0 +1,11 @@
+{
+  "name": "flax_rpg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Devon Henegar <devon.henegar@gmail.com>",
+  "license": "ISC"
+}
