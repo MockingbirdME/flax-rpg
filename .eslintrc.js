@@ -1,19 +1,22 @@
 module.exports = {
-  "env": {
-    "es6": true,
-    "mocha": true,
-    "node": true
+  'env': {
+    'browser': true,
+    'es2021': true
   },
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+  'extends': [
+    'plugin:react/recommended',
+    'eslint:recommended'
+  ],
+  'parserOptions': {
+    'ecmaFeatures': {
+      'jsx': true
+    },
+    'ecmaVersion': 12,
+    'sourceType': 'module'
   },
-
-  "extends": ["eslint:recommended"],
-
+  'plugins': [
+    'react'
+  ],
   "rules": {
     // //////// Possible Errors //////////
 
@@ -174,7 +177,7 @@ module.exports = {
 
     ////////// Stylistic Issues //////////
 
-    "array-bracket-newline": 2, // enforce linebreaks after opening and before closing array brackets
+    "array-bracket-newline": 0, // enforce linebreaks after opening and before closing array brackets
     "array-bracket-spacing": 2, // enforce consistent spacing inside array brackets
     "array-element-newline": 0, // enforce line breaks after each array element
     "block-spacing": 0, // disallow or enforce spaces inside of blocks after opening block and before closing block
