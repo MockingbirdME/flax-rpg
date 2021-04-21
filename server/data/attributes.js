@@ -103,7 +103,7 @@ const resourceAttributes = {
       "The total amount of stamina a character has.",
     uses: "Stamina is used for fuel various actions a character may take as they push themselves to their limits with acts of arcane or physical prowes. Max stamina can also be spent to reduce damage the character suffers potentially reducing or preventing wounds.",
     baseValue:
-      "3 + 2 * body."
+      "3 + 2 * body, minimum 1."
   },
   willpower: {
     displayName: "Willpower",
@@ -111,7 +111,7 @@ const resourceAttributes = {
       "The total amount of willpower a character has.",
     uses: "Effects that affect a characters mind can only be applied if the target's willpower is low enough, other effects ware at the targets mind reducing their willpower. Additionally, willpower can be spent to increase a skill check result by the character's rank in the primary skill, limit once per skill check. Max willpower can be spent to ignore many status effects, such as fear and wounds, for one turn.",
     baseValue:
-      "3 + mind."
+      "3 + mind, minimum 1."
   }
 };
 
