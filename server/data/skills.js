@@ -55,6 +55,11 @@ let skillsData = {
         displayName: "Sense Motive",
         description:
           "reading people and being able to tell when they're lying or acting it is the relevant secondary skill to the sense motive skill check."
+      },
+      sizeUp: {
+        displayName: "Size Up",
+        description:
+          "spending time observing people can tell you a lot about them, do they walk like a swordsman, sweat when they're about to do something dangerous, have a nervous tick when they lie? This is the relevant secondary skill for learning details about a character through extended observation."
       }
     }
   },
@@ -451,5 +456,7 @@ let skillsData = {
     }
   }
 };
+
+console.log(`${Object.keys(skillsData).length} skills to select from.`);
 console.log(Object.keys(skillsData));
 module.exports = skillsData;

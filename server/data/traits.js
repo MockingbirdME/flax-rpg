@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-const utils = require('../lib/trait_utils');
+// const utils = require('../lib/trait_utils');
 
 const traitsData = {
   adventurer: {
@@ -949,5 +949,7 @@ const traitsData = {
     }
   }
 };
+console.log(`${Object.keys(traitsData).length} traits to select from.`);
+console.log(Object.keys(traitsData));
 
 module.exports = traitsData;
