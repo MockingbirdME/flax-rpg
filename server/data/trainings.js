@@ -292,6 +292,13 @@ const commonFocusedBackgrounds = {
       return true;
     },
     description: "",
+    luck: 0,
+    stamina: 3,
+    willpower: 2,
+    startingWealth: 1,
+    languagePoints: 0,
+    focusSkills: ["personal movement", "physical conditioning"],
+    auxiliarySkills: ["discipline", "melee combat", "personal defense", "personal movement", "physical conditioning"],
     details: `
     * 2 stamina and 1 willpower.
     * Related Focus Skills: personal movement, physical conditioning.

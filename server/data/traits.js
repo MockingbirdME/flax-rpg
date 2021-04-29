@@ -348,7 +348,7 @@ const traitsData = {
   trainingExpert: {
     displayName: "Training, Expert",
     type: "General",
-    requirements: ["At least five total ranks in associated secondary skills."],
+    requirements: ["At least seven total ranks in associated secondary skills."],
     requirementsDescription:
       "At least five total ranks in associated secondary skills.",
     keywords: ["Epic"],
@@ -357,7 +357,7 @@ const traitsData = {
       const options = [];
       const {skills} = character;
 
-      const baseSkills = utils.getSkillList(skills, {include: [selectedOptions.baseSkill], requiredRank: 2, minimumSecondaryRanks: 5});
+      const baseSkills = utils.getSkillList(skills, {include: [selectedOptions.baseSkill], requiredRank: 2, minimumSecondaryRanks: 7});
 
       options.push({id: "baseSkill", displayName: "Skill", type: "skill", options: baseSkills});
 
