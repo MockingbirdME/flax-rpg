@@ -1,161 +1,51 @@
 /* eslint-disable complexity */
-// const utils = require('../lib/trait_utils');
 
 const traitsData = {
-  adventurer: {
-    displayName: "Adventurer",
-    type: "Character Type",
+  /* ++++++++++++++++ GENERAL TRAITS ++++++++++++++++ */
+  determined: {
+    displayName: "Determined",
+    type: "General",
     requirements: [],
-    requirementsDescription: "",
-    keywords: ["Starting"],
-    description: `The character:
-        <ul>
-        <li>Start with 10 stamina and 3 max wounds, and gain 3 actions points and 1 reaction point per round in combat</li>
-        <li>chooses 3 skills to gain rank one (novice) in and for each of them two secondary skills associated with that skill to gain rank one in.</li>
-        <li>chooses one of their skills at rank one to increase to rank two (skilled) and one of it's secondary skills to increase by one rank.</li>
-        <li>learn one spoken language as chosen by the GM.</li>
-        <li>Gain 5 traits of the character's choice following the standard rules for gaining traits.</li>
-        </ul>
-        `,
-    options: (character, selectedOptions = {}) => {
-      const options = [];
-
-      const {skills} = character;
-      const baseSkills = utils.getSkillList(skills, {hasSecondaryAtRank: 0, neededSecondaryMatches: 2, requiredRank: 0, include: [selectedOptions.baseSkillOne, selectedOptions.baseSkillTwo]});
-      const expertSkills = utils.getSkillList(skills, {hasSecondaryUnderRank: 2, requiredRank: 1, include: [selectedOptions.expertSkill]});
-
-      options.push({id: "baseSkillOne", displayName: "Skill", type: "skill", options: baseSkills.filter(skill => skill !== selectedOptions.baseSkillTwo)});
-
-      if (selectedOptions.baseSkillOne) {
-        const secondaryOptions = utils.getSkillList(skills[selectedOptions.baseSkillOne].secondarySkills, {requiredRank: 0, include: [selectedOptions.baseSkillOneSecondarySkillOne, selectedOptions.baseSkillOneSecondarySkillTwo]});
-
-        options.push({id: "baseSkillOneSecondarySkillOne", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions.filter(option => option !== selectedOptions.baseSkillOneSecondarySkillTwo), parentId: "baseSkillOne", parentValue: selectedOptions.baseSkillOne});
-
-        options.push({id: "baseSkillOneSecondarySkillTwo", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions.filter(option => option !== selectedOptions.baseSkillOneSecondarySkillOne), parentId: "baseSkillOne", parentValue: selectedOptions.baseSkillOne});
-      }
-
-      options.push({id: "baseSkillTwo", displayName: "Skill", type: "skill", options: baseSkills.filter(skill => skill !== selectedOptions.baseSkillOne)});
-
-      if (selectedOptions.baseSkillTwo) {
-        const secondaryOptions = utils.getSkillList(skills[selectedOptions.baseSkillTwo].secondarySkills, {requiredRank: 0, include: [selectedOptions.baseSkillTwoSecondarySkillOne, selectedOptions.baseSkillTwoSecondarySkillTwo]});
-
-        options.push({id: "baseSkillTwoSecondarySkillOne", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions.filter(option => option !== selectedOptions.baseSkillOneSecondarySkillTwo), parentId: "baseSkillTwo", parentValue: selectedOptions.baseSkillTwo});
-
-        options.push({id: "baseSkillTwoSecondarySkillTwo", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions.filter(option => option !== selectedOptions.baseSkillOneSecondarySkillOne), parentId: "baseSkillTwo", parentValue: selectedOptions.baseSkillTwo});
-      }
-
-      options.push({id: "expertSkill", displayName: "Expert Skill", type: "skill", options: expertSkills});
-
-      if (selectedOptions.expertSkill) {
-        const secondaryOptions = utils.getSkillList(skills[selectedOptions.expertSkill].secondarySkills, {maxRank: 1, include: [selectedOptions.expertSecondarySkill]});
-
-        options.push({id: "expertSecondarySkill", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions, parentId: "expertSkill", parentValue: selectedOptions.expertSkill});
-      }
-
-      return options;
-    },
+    requirementsDescription: "0/3/6/9/12/15/18/21 ranks in secondary skills associated with Discipline ",
+    keywords: ["Simple"],
+    description:
+      "Each time a character takes this trait they increase their max willpower by one.",
     isCharacterEligible: character => {
-      if (character.traits.find(trait => trait.type === "Character Type")) return false;
-      return true;
+      // TODO check that the character has enough physical conditioning secondary skill ranks.
     },
-    apply: (character, selectedOptions) => {
-      // Add 10 max stamina.
-      character.updateVariable("staminaMaxAdjustment", 10);
-
-      // Add 3 max wounds.
-      character.updateVariable("woundsMaxAdjustment", 3);
-
-      // Add 3 action points.
-      character.updateVariable("actionPointsAdjustment", 3);
-
-      // Add 1 reaction points.
-      character.updateVariable("reactionPointsAdjustment", 1);
-
-      // Add 5 entitled traits.
-      character.updateVariable("extraEntitledTraits", 5);
-
-      if (!selectedOptions) return;
-
-      const {baseSkillOne,
-        baseSkillTwo,
-        expertSkill,
-        baseSkillOneSecondarySkillOne,
-        baseSkillOneSecondarySkillTwo,
-        baseSkillTwoSecondarySkillOne,
-        baseSkillTwoSecondarySkillTwo,
-        expertSecondarySkill} = selectedOptions;
-
-      // TODO validate that all selected options are valid.
-
-      if (baseSkillOne) {
-        character.setSkill(baseSkillOne, 1);
-        if (baseSkillOneSecondarySkillOne) character.setSecondarySkill(baseSkillOne, baseSkillOneSecondarySkillOne, 1);
-
-        if (baseSkillOneSecondarySkillTwo) character.setSecondarySkill(baseSkillOne, baseSkillOneSecondarySkillTwo, 1);
-      }
-      if (baseSkillTwo) {
-        character.setSkill(baseSkillTwo, 1);
-        if (baseSkillTwoSecondarySkillOne) character.setSecondarySkill(baseSkillTwo, baseSkillTwoSecondarySkillOne, 1);
-
-        if (baseSkillTwoSecondarySkillTwo) character.setSecondarySkill(baseSkillTwo, baseSkillTwoSecondarySkillTwo, 1);
-      }
-      if (expertSkill) {
-        character.setSkill(expertSkill, 2);
-        if (expertSecondarySkill) {
-          const currentExpertSecondarySkillRank = character.skills[expertSkill].secondarySkills[expertSecondarySkill].rank || 0;
-          character.setSecondarySkill(expertSkill, expertSecondarySkill, currentExpertSecondarySkillRank + 1);
-        }
-      }
-      // TODO gain a language
+    apply: (character) => {
+      character.updateVariable("staminaMaxAdjustment", 1);
     }
   },
   hardy: {
     displayName: "Hardy",
     type: "General",
     requirements: [],
-    requirementsDescription: "",
+    requirementsDescription: "10 or more stamina",
     keywords: ["Simple"],
     description:
       "The character gains a bonus die on rolls to resist, or recover from, illness and poisons.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'hardy'),
-    apply: character => character.addTraitAsNote({traitName: 'hardy'})
+    isCharacterEligible: () => {
+      // TODO
+    },
+    apply: (character, options = {}) => {
+      // TODO
+    }
   },
-  hardToKillHealthy: {
-    displayName: "Hard to Kill, Healthy",
+  healthy: {
+    displayName: "Healthy",
     type: "General",
     requirements: [],
-    requirementsDescription: "",
+    requirementsDescription: "0/3/6/9/12/15/18/21 ranks in secondary skills associated with physical conditioning",
     keywords: ["Simple"],
     description:
       "Each time a character takes this trait they increase their max stamina by one.",
-    isCharacterEligible: () => true,
+    isCharacterEligible: character => {
+      // TODO check that the character has enough physical conditioning secondary skill ranks.
+    },
     apply: (character) => {
       character.updateVariable("staminaMaxAdjustment", 1);
     }
-  },
-  hardToKillTough: {
-    displayName: "Hard to Kill, Tough",
-    type: "General",
-    requirements: [],
-    requirementsDescription: "",
-    keywords: ["Heroic"],
-    description:
-      "Each time a character takes this trait they increase their max wounds by one.",
-    isCharacterEligible: () => true,
-    apply: (character) => {
-      character.updateVariable("woundsMaxAdjustment", 1);
-    }
-  },
-  hardToKillPlotArmor: {
-    displayName: "Hard to Kill, Plot Armor",
-    type: "General",
-    requirements: [],
-    requirementsDescription: "",
-    keywords: ["Epic"],
-    description:
-      "Once per scene per instance of this trait the character has they may spend their reaction to suffer no damage from one attack. The controlling player may decide to use this ability after they know the damage the character would take.",
-    isCharacterEligible: () => true,
-    apply: character => character.addTraitAsNote({traitName: 'hardToKillPlotArmor'})
   },
   linguist: {
     displayName: "Linguist",
@@ -164,665 +54,276 @@ const traitsData = {
     requirementsDescription: "",
     keywords: ["Simple"],
     description:
-      "The character learns one spoken or written language or two spoken languages for which they already know a related language."
+      "The character learns one spoken or written language or two spoken languages for which they already know a related language.",
+    isCharacterEligible: () => true,
+    apply: (character, options = {}) => {
+      // TODO
+    }
   },
-  trainingSpecializedNovice: {
-    displayName: "Training, Specialized Novice",
+  skillTraining: {
+    displayName: "Skill Training",
     type: "General",
     requirements: [],
     requirementsDescription: "",
     keywords: ["Simple"],
-    description: "The character gains rank one in a secondary skill.",
+    description: `
+    The character improves aptitude in a selected skill or one of its secondary skills. If the character meets the secondary skill ranks requirement to increase the skill's proviciency level do so; otherwise, increase one eligible secondary skill by one rank.
+    Proficiency requirements and limits
+    | Proficiency | Required Secondary Ranks | Max Secondary Rank |
+    | --- | --- | --- |
+    | not proficient | N/A | 1 |
+    | novice | 1 | 2 |
+    | skilled | 3 | 3 |
+    | expert | 7 | 4 |
+    | master | 15 | 5 |
+    `,
     options: (character, selectedOptions = {}) => {
-      const options = [];
-      const {skills} = character;
+      // TODO
+    },
+    isCharacterEligible: () => true,
+    apply: (character, options = {}) => {
+      // TODO
+    }
+  },
+  tough: {
+    displayName: "Tough",
+    type: "General",
+    requirements: [],
+    requirementsDescription: "6/14/30 total ranks in secondary skill associated with any combination of Discipline and Physical Conditioning",
+    keywords: ["Heroic"],
+    description:
+      "Each time a character takes this trait they increase their max wounds by one.",
+    isCharacterEligible: () => true,
+    apply: (character) => {
+      character.updateVariable("woundsMaxAdjustment", 1);
+    }
+  },
 
-      const baseSkills = utils.getSkillList(character.skills, {include: [selectedOptions.baseSkill], hasSecondaryAtRank: 0});
-
-      options.push({id: "baseSkill", displayName: "Skill", type: "skill", options: baseSkills});
-
-      if (selectedOptions.baseSkill) {
-        const secondaryOptions = utils.getSkillList(skills[selectedOptions.baseSkill].secondarySkills, {requiredRank: 0, include: [selectedOptions.secondarySkill]});
-
-        options.push({id: "secondarySkill", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions, parentId: "baseSkill", parentValue: selectedOptions.baseSkill});
+  /* ++++++++++++++++ COMBAT TRAITS ++++++++++++++++ */
+  ambusher: {
+    displayName: "Ambusher",
+    type: "Combat",
+    requirements: [],
+    requirementsDescription: "1 rank in a secondary skill associated with stealth the first time this trait is taken or the requirements for at least one upgrade for this trait for subsequent times this trait is taken",
+    keywords: ["Heroic"],
+    description:
+      "The character gains an ambush damage bonus that they can apply to eligible attacks, the damage bonus is equal to 3; once a character has applied their ambush bonus damage to a target they cannot apply it to that target again until their next turn. The character may apply their ambush bonus when making a ranged attack at short range or a melee attack against a flat-footed foe.",
+    upgrades: {
+      assassin: {
+        displayName: "Assassin",
+        type: "Add-on",
+        requirementsDescription: "the stealthy upgrade and 15 total ranks in secondary skills associated with stealth.",
+        description:
+          "The characters ambush damage increases by 3 if the target is surprised or by 7 if they're flat footed.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      flanking: {
+        displayName: "Flanking",
+        type: "Add-on",
+        requirementsDescription: "the stealthy upgrade and 3 total ranks in secondary skills associated with melee combat.",
+        description:
+          "The character may apply their ambush bonus when making a melee attack against a foe the character is flanking.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      skilled: {
+        displayName: "Skilled",
+        type: "Add-on",
+        requirementsDescription: "",
+        description:
+          "Each time the character takes this trait increase their ambush damage by 1.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      sneakAttack: {
+        displayName: "Sneak Attack",
+        type: "Add-on",
+        requirementsDescription: "3 rank in secondary skills associated with stealth",
+        description:
+          "The character may apply their ambush bonus when making a melee attack against a flat footed or surprised foe.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      sniper: {
+        displayName: "Sniper",
+        type: "Add-on",
+        requirementsDescription: "the stealthy upgrade and 3 total ranks in secondary skills associated with ranged combat.",
+        description:
+          "The character may apply their ambush bonus when making a ranged attack at any range provided they meet their other requirements to apply this bonus.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      stealthy: {
+        displayName: "Stealthy",
+        type: "Add-on",
+        requirementsDescription: "the sneak attack upgrade and at least 7 total ranks in secondary skills associated with any combination of stealth and personal movement",
+        description:
+          "The character may apply their ambush bonus when the target is unaware of the character's presence, or unaware that they are a threat.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
       }
-
-      return options;
     },
-    isCharacterEligible: character => utils.getSkillList(character.skills, {hasSecondaryAtRank: 0}).length > 0,
-    apply: (character, options = {}) => {
-      const {baseSkill, secondarySkill} = options;
-      if (!baseSkill || !secondarySkill) return;
-      // TODO validate that secondary skill is currently rank 0.
-      character.setSecondarySkill(baseSkill, secondarySkill, 1);
-    }
-  },
-  trainingSpecializedSkilled: {
-    displayName: "Training, Specialized Skilled",
-    type: "General",
-    requirements: [],
-    requirementsDescription: "",
-    keywords: ["Simple"],
-    description:
-      "The character increases a secondary skill from rank one to rank two.",
-    options: (character, selectedOptions = {}) => {
-      const options = [];
-      const {skills} = character;
-
-      const baseSkills = utils.getSkillList(skills, {include: [selectedOptions.baseSkill], hasSecondaryAtRank: 1});
-
-      options.push({id: "baseSkill", displayName: "Skill", type: "skill", options: baseSkills});
-
-      if (selectedOptions.baseSkill) {
-        const secondaryOptions = utils.getSkillList(skills[selectedOptions.baseSkill].secondarySkills, {requiredRank: 1, include: [selectedOptions.secondarySkill]});
-
-        options.push({id: "secondarySkill", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions, parentId: "baseSkill", parentValue: selectedOptions.baseSkill});
-      }
-
-      return options;
+    isCharacterEligible: character => {
+      // TODO make this work
     },
-    isCharacterEligible: character => utils.getSkillList(character.skills, {hasSecondaryAtRank: 1}).length > 0,
-    apply: (character, options = {}) => {
-      const {baseSkill, secondarySkill} = options;
-      if (!baseSkill || !secondarySkill) return;
-      // TODO validate that secondary skill is currently rank 1.
-      character.setSecondarySkill(baseSkill, secondarySkill, 2);
-    }
-  },
-  trainingSpecializedExpert: {
-    displayName: "Training, Specialized Expert",
-    type: "General",
-    requirements: [],
-    requirementsDescription: "",
-    keywords: ["Heroic"],
-    description:
-      "The character increases a secondary skill from rank two to rank three.",
-    options: (character, selectedOptions = {}) => {
-      const options = [];
-      const {skills} = character;
-
-      const baseSkills = utils.getSkillList(skills, {include: [selectedOptions.baseSkill], hasSecondaryAtRank: 2});
-
-      options.push({id: "baseSkill", displayName: "Skill", type: "skill", options: baseSkills});
-
-      if (selectedOptions.baseSkill) {
-        const secondaryOptions = utils.getSkillList(skills[selectedOptions.baseSkill].secondarySkills, {requiredRank: 2, include: [selectedOptions.secondarySkill]});
-
-        options.push({id: "secondarySkill", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions, parentId: "baseSkill", parentValue: selectedOptions.baseSkill});
-      }
-
-      return options;
-    },
-    isCharacterEligible: character => utils.getSkillList(character.skills, {hasSecondaryAtRank: 2}).length > 0,
-    apply: (character, options = {}) => {
-      const {baseSkill, secondarySkill} = options;
-      if (!baseSkill || !secondarySkill) return;
-      // TODO validate that secondary skill is currently rank 2.
-      character.setSecondarySkill(baseSkill, secondarySkill, 3);
-    }
-  },
-  trainingSpecializedMaster: {
-    displayName: "Training, Specialized Master",
-    type: "General",
-    requirements: [],
-    requirementsDescription: "",
-    keywords: ["Epic"],
-    description:
-      "The character increases a secondary skill from rank three to rank four.",
-    options: (character, selectedOptions = {}) => {
-      const options = [];
-      const {skills} = character;
-
-      const baseSkills = utils.getSkillList(skills, {include: [selectedOptions.baseSkill], hasSecondaryAtRank: 3});
-
-      options.push({id: "baseSkill", displayName: "Skill", type: "skill", options: baseSkills});
-
-      if (selectedOptions.baseSkill) {
-        const secondaryOptions = utils.getSkillList(skills[selectedOptions.baseSkill].secondarySkills, {requiredRank: 3, include: [selectedOptions.secondarySkill]});
-
-        options.push({id: "secondarySkill", displayName: "Secondary Skill", type: "secondary skill", options: secondaryOptions, parentId: "baseSkill", parentValue: selectedOptions.baseSkill});
-      }
-
-      return options;
-    },
-    isCharacterEligible: character => utils.getSkillList(character.skills, {hasSecondaryAtRank: 3}).length > 0,
-    apply: (character, options = {}) => {
-      const {baseSkill, secondarySkill} = options;
-      if (!baseSkill || !secondarySkill) return;
-      // TODO validate that secondary skill is currently rank 2.
-      character.setSecondarySkill(baseSkill, secondarySkill, 4);
-    }
-  },
-  trainingNovice: {
-    displayName: "Training, Novice",
-    type: "General",
-    requirements: ["At least 1 rank in an associated secondary skill."],
-    requirementsDescription:
-      "At least 1 rank in an associated secondary skill.",
-    keywords: ["Simple"],
-    description: "The character gains rank one in a new skill.",
-    options: (character, selectedOptions = {}) => {
-      const options = [];
-      const {skills} = character;
-
-      const baseSkills = utils.getSkillList(skills, {include: [selectedOptions.baseSkill], requiredRank: 0, minimumSecondaryRanks: 1});
-
-      options.push({id: "baseSkill", displayName: "Skill", type: "skill", options: baseSkills});
-
-      return options;
-    },
-    isCharacterEligible: character => utils.getSkillList(character.skills, {requiredRank: 0, minimumSecondaryRanks: 1}).length > 0,
-    apply: (character, options = {}) => {
-      const {baseSkill} = options;
-      if (!baseSkill) return;
-      // TODO validate that skill is currently rank 0.
-      character.setSkill(baseSkill, 1);
-    }
-  },
-  trainingSkilled: {
-    displayName: "Training, Skilled",
-    type: "General",
-    requirements: ["At least three total ranks in associated secondary skills."],
-    requirementsDescription:
-      "At least three total ranks in associated secondary skills.",
-    keywords: ["Heroic"],
-    description: "The character increases a skill from rank one to rank two.",
-    options: (character, selectedOptions = {}) => {
-      const options = [];
-      const {skills} = character;
-
-      const baseSkills = utils.getSkillList(skills, {include: [selectedOptions.baseSkill], requiredRank: 1, minimumSecondaryRanks: 3});
-
-      options.push({id: "baseSkill", displayName: "Skill", type: "skill", options: baseSkills});
-
-      return options;
-    },
-    isCharacterEligible: character => utils.getSkillList(character.skills, {requiredRank: 1, minimumSecondaryRanks: 3}).length > 0,
-    apply: (character, options = {}) => {
-      const {baseSkill} = options;
-      if (!baseSkill) return;
-      // TODO validate that skill is currently rank 1.
-      character.setSkill(baseSkill, 2);
-    }
-  },
-  trainingExpert: {
-    displayName: "Training, Expert",
-    type: "General",
-    requirements: ["At least seven total ranks in associated secondary skills."],
-    requirementsDescription:
-      "At least five total ranks in associated secondary skills.",
-    keywords: ["Epic"],
-    description: "The character increases a skill from rank two to rank three.",
-    options: (character, selectedOptions = {}) => {
-      const options = [];
-      const {skills} = character;
-
-      const baseSkills = utils.getSkillList(skills, {include: [selectedOptions.baseSkill], requiredRank: 2, minimumSecondaryRanks: 7});
-
-      options.push({id: "baseSkill", displayName: "Skill", type: "skill", options: baseSkills});
-
-      return options;
-    },
-    isCharacterEligible: character => utils.getSkillList(character.skills, {requiredRank: 2, minimumSecondaryRanks: 5}).length > 0,
-    apply: (character, options = {}) => {
-      const {baseSkill} = options;
-      if (!baseSkill) return;
-      // TODO validate that skill is currently rank 1.
-      character.setSkill(baseSkill, 3);
-    }
-  },
-  heroicAttribute: {
-    displayName: "Heroic Attribute",
-    type: "General",
-    requirements: [],
-    requirementsDescription: "",
-    keywords: ["Epic"],
-    description:
-      "One of the character's primary attribute's is increased by one. This can not increase any trait to higher than 3 plus the strains racial adjustment to that attribute.",
-    options: (character, selectedOptions = {}) => {
-      const options = [];
-      const {primaryAttributes} = character;
-
-      const eligibleAttributes = Object.keys(primaryAttributes).filter(attributeName => primaryAttributes[attributeName] < 3 || attributeName === selectedOptions.primaryAttribute);
-
-      options.push({id: "primaryAttribute", displayName: "Attribute", type: "attribute", options: eligibleAttributes});
-
-      return options;
-    },
-    isCharacterEligible: character => Object.keys(character.primaryAttributes).filter(attributeName => character.primaryAttributes[attributeName] < 3).length > 0,
-    apply: (character, options = {}) => {
-      const {primaryAttribute} = options;
-
-      if (!primaryAttribute) return;
-      // TODO validate that options are valid choices.
-      character.modifyAttribute(primaryAttribute, +1);
-    }
-  },
-  arcaneFont: {
-    displayName: "Arcane Font",
-    type: "Mage",
-    requirements: ["Dependent Mage", "Learned Mage", "Natural Mage"],
-    requirementsDescription: "Dependent Mage, Learned Mage, or Natural Mage.",
-    keywords: ["Heroic"],
-    description:
-      "Before making a skill check for casting a spell, gathering arcane energy, or crafting arcane energy the caster may choose to add their body, along with their mind, to the skill check; if they do so they lose stamina equal to twice their body stat, if positive, before making the affected skill check."
-  },
-  cantripCasterSpeedy: {
-    displayName: "Cantrip Caster, Speedy",
-    type: "Mage",
-    requirements: ["Dependent Mage", "Learned Mage", "Natural Mage"],
-    requirementsDescription: "Dependent Mage, Learned Mage, or Natural Mage.",
-    keywords: ["Heroic"],
-    description:
-      "The first cantrip the character casts each turn does not count against the limit of one magic action per turn."
-  },
-  dependentMage: {
-    displayName: "Dependent Mage",
-    type: "Mage",
-    requirements: ["No other mage traits"],
-    requirementsDescription: "No other mage traits",
-    keywords: ["Heroic"],
-    description: `The character is a dependent mage gaining the following benefits:
-        <ul>
-        <li>They can know up to two spells.</li>
-        <li>When they gain their first rank in an arcane theme they gain access to a single arcane power associated with that theme<li>
-        <li>They gain access to any cantrips or passive abilities associated with powers they have access to and themes they have at least one rank in.<li>
-        <li>They can have ranks in no more than one plus their ranks in magical aptitude arcane arcane theme secondary skills.</li>
-        <li>They suffers one penalty die to all skill checks to cast spells, gather, or shape arcane energy if they have not consumed arcane essence in the last 8 hours.</li>
-        <li>They cannot make skill checks to cast spells, gather, or shape arcane energy if they have not consumed arcane essence in the last 24 hours.</li>
-        <li>They cannot cast cantrips if they have not consumed arcane essence in the last span of days.</li>
-        </ul>`
-  },
-  dependentMageExpandedPowers: {
-    displayName: "Dependent Mage, Expanded Powers",
-    type: "Mage",
-    requirements: ["Dependent Mage"],
-    requirementsDescription: "Dependent Mage",
-    keywords: ["Simple"],
-    description:
-      "The character chooses one arcane theme secondary skill that they have at least one rank in, they gain access to one additional power associated with that theme."
-  },
-  expandedSpellList: {
-    displayName: "Expanded Spell List",
-    type: "Mage",
-    requirements: ["Dependent Mage", "Learned Mage", "Natural Mage"],
-    requirementsDescription: "Dependent Mage, Learned Mage, or Natural Mage.",
-    keywords: ["Simple"],
-    description:
-      "This trait may be taken any number of times, each time it is taken the character increases the number of spells they know by one."
-  },
-  learnedMage: {
-    displayName: "Learned Mage",
-    type: "Mage",
-    requirements: ["No other mage traits, at least rank one in both the discipline and magical aptitude skills."],
-    requirementsDescription:
-      "No other mage traits, at least rank one in both the discipline and magical aptitude skills.",
-    keywords: ["Simple"],
-    description: `The character is a learned mage gaining the following benefits:
-        <ul>
-        <li>They can know up to two spells.</li>
-        <li>They gains access to two arcane theme secondary skills, those skills cannot be above rank one and cannot be increased beyond rank one.</li>
-        <li>They gain access to any cantrip associated with any arcane theme or power they have access to.<li>
-        <li>They gain access to learned mage specific arcane effects.</li>
-        </ul>`
-  },
-  learnedMageAdvancedLearning: {
-    displayName: "Learned Mage, Advanced Learning",
-    type: "Mage",
-    requirements: ["Learned Mage"],
-    requirementsDescription: "Learned Mage",
-    keywords: ["Simple"],
-    description:
-      "The character chooses one arcane theme secondary skill they have access to, that skill can be increased by one rank (Note: this trait does not increase the rank of the selected skill, it only allows other traits/effects to increase it)."
-  },
-  learnedMageExpandedLearning: {
-    displayName: "Learned Mage, Expanded Learning",
-    type: "Mage",
-    requirements: ["Learned Mage"],
-    requirementsDescription: "Learned Mage",
-    keywords: ["Heroic"],
-    description:
-      "The character gains access to one arcane theme secondary skill that skill cannot be above rank one and cannot be increased beyond rank one."
-  },
-  learnedMageInternalizedLearning: {
-    displayName: "Learned Mage, Internalized Learning",
-    type: "Mage",
-    requirements: ["Learned Mage"],
-    requirementsDescription: "Learned Mage",
-    keywords: ["Heroic"],
-    description:
-      "The character chooses one arcane theme secondary skill they have access to, they gain access to any passive abilities associated with that theme or any of its powers."
-  },
-  naturalMage: {
-    displayName: "Natural Mage",
-    type: "Mage",
-    requirements: ["No other mage traits"],
-    requirementsDescription: "No other mage traits",
-    keywords: ["Heroic"],
-    description: `The character is a natural mage gaining the following benefits:
-      <ul>
-      <li>They can know up to two spells.</li>
-      <li>They choose one arcane theme secondary skill to be be their primary arcane theme.</li>
-      <li>They gain access to their primary arcane theme secondary skill and treat this secondary skill as being two ranks higher than it actually is.</li>
-      <li>They gain access to any cantrips associated with their primary arcane theme or any of its powers</li>
-      <li>They gain access to any passive abilities associated with any arcane theme or power they have access to.<li>
-      </ul>`
-  },
-  naturalMageExpandedPowers: {
-    displayName: "Natural Mage, Expanded Powers",
-    type: "Mage",
-    requirements: ["Natural Mage"],
-    requirementsDescription: "Natural Mage",
-    keywords: ["Simple"],
-    description:
-      "The character chooses one arcane theme secondary skill that has at least one power available to it the caster already has access to, they gain access to that arcane theme, that secondary skill cannot be above rank one and cannot have its rank increased beyond one."
-  },
-  sneakySpellCaster: {
-    displayName: "Sneaky Spell Caster",
-    type: "Mage",
-    requirements: ["Dependent Mage, Learned Mage, or Natural Mage."],
-    requirementsDescription: "Dependent Mage, Learned Mage, or Natural Mage.",
-    keywords: ["Heroic"],
-    description:
-      "This trait may be taken any number of times. Reduce the cost of component effects the caster adds to spells and cantrips by one per instance of this trait they have; this can not reduce an effect's arcane cost below zero."
-  },
-  ambusherBackstab: {
-    displayName: "Ambusher, Backstab",
-    type: "Combat",
-    requirements: [],
-    requirementsDescription: "",
-    keywords: ["Heroic"],
-    description:
-      "The character gains an ambush damage bonus that they can apply to eligible attacks, the damage bonus is equal to 3; once a character has applied their ambush bonus damage to a target they cannot apply it to that target again until their next turn. Additionally, the character may apply their ambush bonus when making a melee attack against a flat-footed foe.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'ambusherBackstab'),
     apply: character => {
-      character.updateVariable("ambush", 3, {key: "damage"});
-      character.updateVariable("ambush", "melee", {key: "attackType", type: "array"});
-      character.updateVariable("ambush", "flat-footed", {key: "targetRequirement", type: "array"});
-      character.addNote({name: 'Ambusher', description: `The character inflicts ${character.getVariable('ambush', {key: 'damage'})} extra damage when making ${character.getVariable('ambush', {key: 'attackType'}).join(' or ')} attacks against opponents who are ${character.getVariable('ambush', {key: 'targetRequirement'}).join(' or ')}, limit once per target per round.`});
-    }
-  },
-  ambusherSneakAttack: {
-    displayName: "Ambusher, Sneak Attack",
-    type: "Combat",
-    requirements: ["Ambusher, Backstab"],
-    requirementsDescription: "Backstab Ambusher",
-    keywords: ["Simple"],
-    description:
-      "The character may apply their ambush bonus when making a melee attack against a flat footed or surprised foe.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'ambusherBackstab') && !character.traits.some(trait => trait.id === 'ambusherSneakAttack'),
-    apply: character => {
-      character.updateVariable("ambush", "surprised", {key: "targetRequirement", type: "array"});
-      character.replaceNote({name: 'Ambusher', description: `The character inflicts ${character.getVariable('ambush', {key: 'damage'})} extra damage when making ${character.getVariable('ambush', {key: 'attackType'}).join(' or ')} attacks against opponents who are ${character.getVariable('ambush', {key: 'targetRequirement'}).join(' or ')}, limit once per target per round.`});
-    }
-  },
-  ambusherStealthy: {
-    displayName: "Ambusher, Stealthy",
-    type: "Combat",
-    requirements: ["Sneak Attack Ambusher"],
-    requirementsDescription: "Sneak Attack Ambusher",
-    keywords: ["Simple"],
-    description:
-      "The character may apply their ambush bonus when making a melee attack against a foe who is unaware of the character's presence, or unaware that they are a threat.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'ambusherSneakAttack') && !character.traits.some(trait => trait.id === 'ambusherStealthy'),
-    apply: character => {
-      character.updateVariable("ambush", "unaware you pose a threat", {key: "targetRequirement", type: "array"});
-      character.replaceNote({name: 'Ambusher', description: `The character inflicts ${character.getVariable('ambush', {key: 'damage'})} extra damage when making ${character.getVariable('ambush', {key: 'attackType'}).join(' or ')} attacks against opponents who are ${character.getVariable('ambush', {key: 'targetRequirement'}).join(' or ')}, limit once per target per round.`});
-    }
-  },
-  ambusherFlanking: {
-    displayName: "Ambusher, Flanking",
-    type: "Combat",
-    requirements: ["Ambusher, Stealthy"],
-    requirementsDescription: "Stealthy Ambusher",
-    keywords: ["Heroic"],
-    description:
-      "The character may apply their ambush bonus when making a melee attack against a foe the character is flanking.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'ambusherStealthy') && !character.traits.some(trait => trait.id === 'ambusherFlanking'),
-    apply: character => {
-      character.updateVariable("ambush", "are being flanked by the character", {key: "targetRequirement", type: "array"});
-      character.replaceNote({name: 'Ambusher', description: `The character inflicts ${character.getVariable('ambush', {key: 'damage'})} extra damage when making ${character.getVariable('ambush', {key: 'attackType'}).join(' or ')} attacks against opponents who are ${character.getVariable('ambush', {key: 'targetRequirement'}).join(' or ')}, limit once per target per round.`});
-    }
-  },
-  amusherRanged: {
-    displayName: "Ambusher, Ranged",
-    type: "Combat",
-    requirements: ["Ambusher, Backstab"],
-    requirementsDescription: "Backstab Ambusher",
-    keywords: ["Simple"],
-    description:
-      "The character may apply their ambush bonus when making a ranged attack at close range provided they meet their other requirements to apply this bonus.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'ambusherBackstab') && !character.traits.some(trait => trait.id === 'amusherRanged'),
-    apply: character => {
-      character.updateVariable("ambush", "ranged (at close range)", {key: "attackType", type: "array"});
-      character.replaceNote({name: 'Ambusher', description: `The character inflicts ${character.getVariable('ambush', {key: 'damage'})} extra damage when making ${character.getVariable('ambush', {key: 'attackType'}).join(' or ')} attacks against opponents who are ${character.getVariable('ambush', {key: 'targetRequirement'}).join(' or ')}, limit once per target per round.`});
-    }
-  },
-  ambusherSniper: {
-    displayName: "Ambusher, Sniper",
-    type: "Combat",
-    requirements: ["Ambusher, Ranged"],
-    requirementsDescription: "Ranged Ambusher",
-    keywords: ["Heroic"],
-    description:
-      "The character may apply their ambush bonus when making a ranged attack at any range provided they meet their other requirements to apply this bonus.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'amusherRanged') && !character.traits.some(trait => trait.id === 'ambusherSniper'),
-    apply: character => {
-      character.updateVariable("ambush", "ranged (at any range)", {key: "attackType", type: "array"});
-      character.replaceNote({name: 'Ambusher', description: `The character inflicts ${character.getVariable('ambush', {key: 'damage'})} extra damage when making ${character.getVariable('ambush', {key: 'attackType'}).join(' or ')} attacks against opponents who are ${character.getVariable('ambush', {key: 'targetRequirement'}).join(' or ')}, limit once per target per round.`});
-    }
-  },
-  ambusherSkilled: {
-    displayName: "Ambusher, Skilled",
-    type: "Combat",
-    requirements: ["Ambusher, Backstab"],
-    requirementsDescription: "Backstab Ambusher",
-    keywords: ["Simple"],
-    description:
-      "Increase the character's ambush damage bonus by 1, this trait may be taken multiple times.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'ambusherBackstab'),
-    apply: character => {
-      character.updateVariable("ambush", 1, {key: "damage"});
-      character.replaceNote({name: 'Ambusher', description: `The character inflicts ${character.getVariable('ambush', {key: 'damage'})} extra damage when making ${character.getVariable('ambush', {key: 'attackType'}).join(' or ')} attacks against opponents who are ${character.getVariable('ambush', {key: 'targetRequirement'}).join(' or ')}, limit once per target per round.`});
-    }
-  },
-  ambusherAssassin: {
-    displayName: "Ambusher, Assassin",
-    type: "Combat",
-    requirements: ["Ambusher, Sneak Attack"],
-    requirementsDescription: "Sneak Attack Ambusher",
-    keywords: ["Heroic"],
-    description:
-      "Increase the character's ambush damage bonus by 3, this trait may be taken multiple times.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'ambusherSneakAttack'),
-    apply: character => {
-      character.updateVariable("ambush", 3, {key: "damage"});
-      character.replaceNote({name: 'Ambusher', description: `The character inflicts ${character.getVariable('ambush', {key: 'damage'})} extra damage when making ${character.getVariable('ambush', {key: 'attackType'}).join(' or ')} attacks against opponents who are ${character.getVariable('ambush', {key: 'targetRequirement'}).join(' or ')}, limit once per target per round.`});
+      // TODO make this work.
     }
   },
   combatReflexes: {
     displayName: "Combat Reflexes",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
+    requirementsDescription: "1 rank in a secondary skill associated with melee combat the first time this trait is taken or the requirements for at least one upgrade for this trait for subsequent times this trait is taken",
     keywords: ["Heroic"],
     description:
-      "The character gains a second reaction each turn, this reaction can only be used to make a free attack.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'combatReflexes'),
+      "Once per round the character may make a combat reflexes reaction, this reaction does not cost an action on the character's next turn. The character may use their combat reflexes reaction to make a free attack when one is provoked.",
+    upgrades: {
+      takeTheShot: {
+        displayName: "Take the Shot",
+        type: "Add-on",
+        requirementsDescription: "3 ranks in secondary skills associated with ranged combat.",
+        description:
+          "The character may use their combat reflexes reaction to take a held ranged attack action.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      more: {
+        displayName: "TODO add a few more",
+        type: "Add-on",
+        requirementsDescription: "3 ranks in secondary skills associated with ranged combat.",
+        description:
+          "At the very least we need one for quick movments and a few that provide new reaction options.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      }
+    },
+    isCharacterEligible: character => {
+      // TODO make this work
+    },
     apply: character => {
-      character.updateVariable("reactionPointsAdjustment", 1);
-      character.addNote({name: 'Combat Reflexes', description: `The additional reaction(s) made avaiable by combat reflexes traits can only be used to make free attacks.`});
-    }
-  },
-  combatReflexesAdvanced: {
-    displayName: "Combat Reflexes, Advanced",
-    type: "Combat",
-    requirements: ["Combat Reflexes"],
-    requirementsDescription: "Combat Reflexes",
-    keywords: ["Simple"],
-    description: "Gain an additional reaction point each turn, a character can not have more reaction points than action points.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'combatReflexes') && character.actionPoints > character.reactionPoints,
-    apply: character => {
-      character.updateVariable("reactionPointsAdjustment", 1);
-    }
-  },
-  combatReflexesImproved: {
-    displayName: "Combat Reflexes, Improved",
-    type: "Combat",
-    requirements: ["Combat Reflexes"],
-    requirementsDescription: "Combat Reflexes",
-    keywords: ["Simple"],
-    description:
-      "The additional reaction gained from *combat reflexes* can now be used for any reaction.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'combatReflexes') && !character.traits.some(trait => trait.id === 'combatReflexesImproved'),
-    apply: character => {
-      character.deleteNote('Combat Reflexes');
+      // TODO make this work.
     }
   },
   dangerSense: {
     displayName: "Danger Sense",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
+    requirementsDescription: "1/3/7/15 total ranks in secondary skill associated with each the Awareness and Personal Defense skills.",
     keywords: ["Simple"],
-    description:
-      "The character is never *flat footed* when conscious and unrestrained.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'dangerSense'),
+    description: `
+    Characters can take this trait multiple times gaining cumulative benefits for each time they've taken this trait.
+      1 - The character is never *flat footed* when conscious and unrestrained
+      2 - The character still benefits from their melee, ranged, and mental defense bonuses when *surprised*, conscious, and unrestrained
+      3 - The character may act on rounds when they are surprised at initiative - 10, if their initiative would be before all non-surprised enemies they act after the enemy with the highest initiative.
+      4 - The character acts normally on rounds they are surprised, they stop being surprised once they have acted.
+      `,
+    isCharacterEligible: character => {
+      // TODO make this work
+    },
     apply: character => {
-      character.addNote({name: 'Danger Sense', description: "When conscious and unrestrained, you are never flat footed. "});
-    }
-  },
-  dangerSenseImproved: {
-    displayName: "Danger Sense, Improved",
-    type: "Combat",
-    requirements: ["Danger Sense"],
-    requirementsDescription: "Danger Sense",
-    keywords: ["Heroic"],
-    description:
-      "The character still benefits from their melee, ranged, and mental defense bonuses when *surprised*, conscious, and unrestrained.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'dangerSense') && !character.traits.some(trait => trait.id === 'dangerSenseImproved'),
-    apply: character => {
-      character.replaceNote({name: 'Danger Sense', description: "When conscious and unrestrained, you are never flat footed and still benifit from your melee, ranged, and mental defense bonuses when surprised."});
-    }
-  },
-  dangerSenseHeroic: {
-    displayName: "Danger Sense, Heroic",
-    type: "Combat",
-    requirements: ["Danger Sense, Improved"],
-    requirementsDescription: "Improved Danger Sense",
-    keywords: ["Heroic"],
-    description:
-      "The character may act on rounds when they are surprised, if their initiative would be before all non-surprised enemies they act after the enemy with the highest initiative.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'dangerSenseImproved') && !character.traits.some(trait => trait.id === 'dangerSenseHeroic'),
-    apply: character => {
-      character.replaceNote({name: 'Danger Sense', description: "When conscious and unrestrained, you are never flat footed, still benifit from your melee, ranged, and mental defense bonuses and can act when surprised (if you would go before a non surprised character set your initiative to one less than  that  character's initiative)."});
+      // TODO make this work.
     }
   },
   dualWeilder: {
-    displayName: "Dual Weilder",
+    displayName: "dualWeilder",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
+    requirementsDescription: "3/7 total ranks in secondary skills associated with any combination of melee combat and ranged combat.",
     keywords: ["Simple"],
-    description:
-      "The character can make the off-hand attack combat action with weapons that have the *light* or *balanced* and the *one-handed* or *hand-and-a-half* traits.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'dualWeilder'),
+    description: `
+    Characters can take this trait multiple times gaining cumulative benefits for each time they've taken this trait.
+        1 - The character can make the off-hand attack combat action with weapons that have the *light* or *balanced* and the *one-handed* or *hand-and-a-half* traits.
+        2 - The character can wield any weapon without the *two-handed* trait in their off hand and make off handed attacks with them.
+    `,
+    isCharacterEligible: character => {
+      // TODO make this work
+    },
     apply: character => {
-      // TODO consider if this needs to set some variable once skill checks/combat actions are implemented for a character.
-      character.addNote({name: 'Dual Weilder', description: "You can make off-hand attacks with weapons that have either the light or balanced trait as well as the one-handed or hand-and-a-half traits."});
-    }
-  },
-  dualWeilderHeavy: {
-    displayName: "Dual Weilder, Heavy",
-    type: "Combat",
-    requirements: ["Dual Weilder"],
-    requirementsDescription: "Dual Weilder",
-    keywords: ["Simple"],
-    description:
-      "The character can wield any weapon without the *two-handed* trait in their off hand and make off handed attacks with them.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'dualWeilder') && !character.traits.some(trait => trait.id === 'dualWeilderHeavy'),
-    apply: character => {
-      // TODO consider if this needs to set some variable once skill checks/combat actions are implemented for a character.
-      character.replaceNote({name: 'Dual Weilder', description: "You can make off-hand attacks with weapons so long as they do not have the two-handed trait."});
+      // TODO make this work.
     }
   },
   duelist: {
     displayName: "Duelist",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
-    keywords: ["Simple"],
+    requirementsDescription: "1 rank in a secondary skill associated with personal defense the first time this trait is taken or the requirements for at least one upgrade for this trait for subsequent times this trait is taken",
+    keywords: [""],
     description:
-      "The character may spend one action point on their turn to choose one character within this trait's range of 10 hexes to be their dueling opponent. The character may spend their reaction to add one penalty die to an attack's skill check against them made by their dueling opponent provided the attack was made from within range and no other character is within melee range of them. A character ceases to be a dueling opponent if another character is made a dueling opponent or if they leave the character's sight for a full round.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'duelist'),
+      "The character may spend one action point on their turn to choose one character within this trait's range of 10 hexes to be their dueling opponent. The character may spend their reaction to add one penalty die to an attack's skill check against them made by their dueling opponent provided the attack was made from within this ability's range and no other character is within melee range of them. A character ceases to be a dueling opponent if another character is made a dueling opponent or if they leave the character's sight and this ability's range for one full round.",
+    upgrades: {
+      defensive: {
+        displayName: "Defensive",
+        type: "Add-on",
+        requirementsDescription: "3 ranks in secondary skills associated with personal defense.",
+        description:
+          "When the character spends their reaction to add a penalty die to their dueling opponent they now add one penalty die to all eligible attacks from their opponent until the character's next turn.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      distance: {
+        displayName: "Distance",
+        type: "Add-on",
+        requirementsDescription: "3 ranks in secondary skills associated with ranged combat.",
+        description:
+          "The range for Duelist's effects is increased to 30 hexes.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      melee: {
+        displayName: "Melee",
+        type: "Add-on",
+        requirementsDescription: "3 ranks in secondary skills associated with melee combat.",
+        description:
+          "The character no longer requires that no other character is within melee range of them to use their reaction to gain benefits from duelist traits.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      expert: {
+        displayName: "Expert",
+        type: "Add-on",
+        requirementsDescription: "7 ranks in secondary skills associated with personal defense.",
+        description:
+          "When the character spends their reaction to grant a penalty die to one or more attacks by their dueling opponent they gain one bonus die on their next eligible attack against their dueling opponent before the end of their next turn.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      superlative: {
+        displayName: "Superlative",
+        type: "Add-on",
+        requirementsDescription: "the expert upgrade and 15 ranks in secondary skills associated with personal defense.",
+        description:
+          "When the character spends their reaction to grant a penalty die to one or more attacks by their dueling opponent they may make a single repost or return fire reaction against that opponent before the begining of their next turn without spending a reaction.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      }
+    },
+    isCharacterEligible: character => {
+      // TODO make this work
+    },
     apply: character => {
-      character.updateVariable('duelist', 10, {key: 'range'});
-      character.updateVariable('duelist', 'an attack skill check', {key: 'skillChecks', type: 'string'});
-      character.updateVariable('duelist', ', provided no other characters are within your melee range', {key: 'condition', type: 'string'});
-      character.updateVariable('duelist', '', {key: 'bonus', type: 'string'});
-      character.addNote({name: 'Duelist', description: utils.duelistDescription(character)});
-    }
-  },
-  duelistDefensive: {
-    displayName: "Duelist, Defensive",
-    type: "Combat",
-    requirements: ["Duelist"],
-    requirementsDescription: "Duelist",
-    keywords: ["Simple"],
-    description:
-      "When the character spends their reaction to add a penalty die to their dueling opponent they now add one penalty die to all eligible attacks from their opponent until the character's next turn.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'duelist') && !character.traits.some(trait => trait.id === 'duelistDefensive'),
-    apply: character => {
-      character.updateVariable('duelist', 'any attack skill checks', {key: 'skillChecks', type: 'string'});
-      character.replaceNote({name: 'Duelist', description: utils.duelistDescription(character)});
-    }
-  },
-  duelistDistance: {
-    displayName: "Duelist, Distance",
-    type: "Combat",
-    requirements: ["Duelist"],
-    requirementsDescription: "Duelist",
-    keywords: ["Simple"],
-    description: "The range for Duelist's effects is increased by 20 hexes.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'duelist') && !character.traits.some(trait => trait.id === 'duelistDistance'),
-    apply: character => {
-      character.updateVariable('duelist', 20, {key: 'range'});
-      character.replaceNote({name: 'Duelist', description: utils.duelistDescription(character)});
-    }
-  },
-  duelistMelee: {
-    displayName: "Duelist, Melee",
-    type: "Combat",
-    requirements: ["Duelist"],
-    requirementsDescription: "Duelist",
-    keywords: ["Simple"],
-    description:
-      "The character no longer requires that no other character is within melee range of them to use their reaction to gain benefits from duelist traits.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'duelist') && !character.traits.some(trait => trait.id === 'duelistMelee'),
-    apply: character => {
-      character.updateVariable('duelist', '', {key: 'condition', type: 'string'});
-      character.replaceNote({name: 'Duelist', description: utils.duelistDescription(character)});
-    }
-  },
-  duelistHeroic: {
-    displayName: "Duelist, Heroic",
-    type: "Combat",
-    requirements: ["Two Dualist Traits"],
-    requirementsDescription: "Two Dualist Traits",
-    keywords: ["Heroic"],
-    description:
-      "When the character spends their reaction to grant a penalty die to one or more attacks by their dueling opponent they gain one bonus die on their next eligible attack against their dueling opponent before the end of their next turn.",
-    isCharacterEligible: character => character.traits.filter(trait => trait.id.includes('duelist')).length > 1,
-    apply: character => {
-      character.updateVariable('duelist', ', if at least one attack skill check is affected in this way you gain a bonus die to your first attack skill check against your dueling opponent before the end of your next turn', {key: 'bonus', type: 'string'});
-      character.replaceNote({name: 'Duelist', description: utils.duelistDescription(character)});
+      // TODO make this work.
     }
   },
   fastReflexes: {
     displayName: "Fast Reflexes",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
+    requirementsDescription: "1/3/7/15 total ranks in secondary skill associated with any combination of Awareness, Discipline, Legerdemain, and Personal Movement.",
     keywords: ["Simple"],
     description:
       "For each time a character has this trait they gain a +1 bonus to their initiative.",
@@ -835,10 +336,10 @@ const traitsData = {
     displayName: "Fueled by Pain",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
-    keywords: ["Heroic"],
+    requirementsDescription: "At least 5 max stimina.",
+    keywords: [],
     description:
-      "If a character suffers one or more wounds after fully resolving the damage they regain all missing stamina and all non-magic actions they take on their next turn have a stamina cost of 0.",
+      "If a character suffers one or more wounds after fully resolving the damage they regain all missing stamina and all actions they take before the end of their next turn have their stamina cost reduced by 1, to a minimum of 0.",
     isCharacterEligible: () => true,
     apply: character => {
       // TODO once damage is added to character have this automatically trigger.
@@ -849,106 +350,60 @@ const traitsData = {
     displayName: "Mobile Combatant",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
-    keywords: ["Heroic"],
-    description:
-      "The character gains a mobile combat defense bonus against free attacks provided they have not taken the disengage action this turn, this bonus is equal to their melee defense bonus.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'mobileCombatant'),
-    apply: character => {
-      character.addNote({name: 'Mobile Combatant', description: `As long as you haven't taken the disengage action this turn increase your defense by ${character.defenseBonusMelee > 0 ? character.defenseBonusMelee : 1} against free attacks you provoked by moving.`});
-    }
-  },
-  mobileCombatantImproved: {
-    displayName: "Mobile Combatant, Improved",
-    type: "Combat",
-    requirements: ["Mobile Combatant"],
-    requirementsDescription: "Mobile Combatant",
+    requirementsDescription: "2/6/14/30 total ranks in secondary skill associated with any combination of personal defense and personal movement.",
     keywords: ["Simple"],
-    description:
-      "The character gains their mobile combatant defense bonus to free attacks even if they've taken the disengage action this turn.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'mobileCombatant') && !character.traits.some(trait => trait.id === 'mobileCombatantImproved'),
+    description: `
+    Characters can take this trait multiple times gaining cumulative benefits for each time they've taken this trait.
+        1 - The character gains a mobile combat defense bonus against free attacks provided they have not taken the disengage action this turn, this bonus is equal to their melee defense bonus.
+        2 - The character gains their mobile combatant defense bonus to free attacks even if they've taken the disengage action this turn.
+        3 - The character no longer provokes free attacks.
+        4 - When one or more characters would get a free attack against you for the first time in a scene, if not for having taken this trait, they must spend their reaction as if they have done so.
+    `,
+    isCharacterEligible: character => {
+      // TODO make this work
+    },
     apply: character => {
-      character.replaceNote({name: 'Mobile Combatant', description: `Increase your defense by ${character.defenseBonusMelee > 0 ? character.defenseBonusMelee : 1} against free attacks you provoked by moving.`});
-    }
-  },
-  mobileCombatantHeroic: {
-    displayName: "Mobile Combatant, Heroic",
-    type: "Combat",
-    requirements: ["Mobile Combatant, Improved"],
-    requirementsDescription: "Improved Mobile Combatant",
-    keywords: ["Heroic"],
-    description: "The character no longer provokes free attacks.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'mobileCombatantImproved') && !character.traits.some(trait => trait.id === 'mobileCombatantHeroic'),
-    apply: character => {
-      character.replaceNote({name: 'Mobile Combatant', description: 'You do not provoke free attacks when moving.'});
-    }
-  },
-  multiAttack: {
-    displayName: "Multi-Attack",
-    type: "Combat",
-    requirements: ["custom"],
-    requirementsDescription: "",
-    keywords: ["Heroic"],
-    description:
-      "The first time the character would receive a penalty die to an attack skill check as a result of their multi-attack penalty reduce that penalty by one.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'multiAttack'),
-    apply: character => {
-      character.addNote({name: 'Multi-Attack', description: `The first time the character would receive a penalty die to an attack skill check as a result of their multi-attack penalty reduce that penalty by one.`});
+      // TODO make this work.
     }
   },
   quickDraw: {
     displayName: "Quick Draw",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
-    keywords: ["Simple"],
+    requirementsDescription: "1/3/7/15 total ranks in secondary skill associated with legerdemain.",
+    keywords: [],
     description:
-      "The first *ready/stow item* action the character takes each turn has an action point cost of 0.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'quickDraw'),
+      "Characters can take this trait multiple times, each round the character may perform one *ready/stow item* action for each time they've taken this trait with an action point cost of 0.",
+    isCharacterEligible: character => character => {
+      // TODO make this work
+    },
     apply: character => {
-      character.addNote({name: 'Quick Draw', description: `The first *ready/stow item* action the character takes each turn has an action point cost of 0.`});
-    }
-  },
-  quickDrawHeroic: {
-    displayName: "Quick Draw, Heroic",
-    type: "Combat",
-    requirements: ["Quick Draw, Improved"],
-    requirementsDescription: "Improved Quick Draw",
-    keywords: ["Heroic"],
-    description:
-      "The character may ready or stow the weapon used in any weapon attack they make.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'quickDraw') && !character.traits.some(trait => trait.id === 'quickDrawHeroic'),
-    apply: character => {
-      character.addNote({name: 'Quick Draw, Heroic', description: `The character may ready or stow the weapon used in any weapon attack they make.`});
+      // TODO make this work.
     }
   },
   recklessAttacker: {
     displayName: "Reckless Attacker",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "",
+    requirementsDescription: "1/3/7/15 total ranks in secondary skill associated with melee combat.",
     keywords: ["Simple"],
-    description:
-      "The character may choose to spend one stamina before making a basic or brawling attack on their turn, if they do they gain a a bonus die to the melee attack skill check related to this attack. If a character uses this ability one or more times on their turn all melee attacks made against them until the begining of their next turn gain a bonus die on their skill checks.",
-    isCharacterEligible: character => !character.traits.some(trait => trait.id === 'recklessAttacker'),
+    description: `
+    Characters can take this trait multiple times gaining cumulative benefits for each time they've taken this trait.
+        1 - The character may choose to spend one stamina and one defense before making a basic or brawling attack on their turn, if they do they gain a bonus die to that melee attack skill check.
+        2 - The character may trigger this ability on any melee attack action, not just basic and brawing attacks.
+        3 - The character may spend an additional stamina and defense when they use this ability to gain a second bonus die on this skill check.
+        4 - The character may spend an additional stamina and defense when they use this ability to gain the bonus dice on all eligible melee attacks they make this turn.
+    `,
+    isCharacterEligible: character => {
+      // TODO make this work
+    },
     apply: character => {
-      character.addNote({name: 'Reckless Attacker', description: `The character may choose to spend one stamina before making a basic or brawling attack on their turn, if they do they gain a a bonus die to the melee attack skill check related to this attack. If a character uses this ability one or more times on their turn all melee attacks made against them until the begining of their next turn gain a bonus die on their skill checks.`});
-    }
-  },
-  recklessAttackerImproved: {
-    displayName: "Reckless Attacker, Improved",
-    type: "Combat",
-    requirements: ["Reckless Attacker"],
-    requirementsDescription: "Reckless Attacker",
-    keywords: ["Heroic"],
-    description:
-      "The character may choose to trigger their reckless attack trait on any melee attack action, not just basic and brawing attacks.",
-    isCharacterEligible: character => character.traits.some(trait => trait.id === 'recklessAttacker') && !character.traits.some(trait => trait.id === 'recklessAttackerImproved'),
-    apply: character => {
-      character.addNote({name: 'Reckless Attacker, Improved', description: `The character may choose to trigger their reckless attack trait on any melee attack action, not just basic and brawing attacks.`});
+      // TODO make this work.
     }
   }
 };
+
+
 console.log(`${Object.keys(traitsData).length} traits to select from.`);
 console.log(Object.keys(traitsData));
 

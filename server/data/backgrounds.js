@@ -1,541 +1,416 @@
-/* This template is just to make copy/pasting new trainings easier.
-const template = {
-  displayName: ",
-  cost: 5,
-  tags: ["background", "common skilled"],
-  prerequisitesDescription: ",
-  checkPrerequisites: character => {
-    console.log(character);
-    return true;
-  },
-  description: ",
-  details: ",
-  apply: character => {
-    console.log(character);
-  }
-};
-*/
-
-// Backgrounds are a set of more comprehensive trainings each with a lofty cost of 15???. These are not restricted to level 0 characters but are the only trainings available to such.
-
 /*
-Three basic background options:
-
-All get:
-3 resources (remember luck counts as two)
-
-
-## Broad range of skills:
-
-Single related skills array
-* Chosen Skills: three related skills.
-* For each chosen skill:
-  - Gain rank one in two different secondary skills associated with the skill.
-  - Gain novice proficiency in the skill.
-  - Gain access to the skilled training trait for that skill.
-  cost:
-    - access to novice training x3
-    - access to skill training x3
-    - secondary rank x6
-    - skill rank x3
-
-## Specialized with auxiliary
-
-Two arrays", "a focused (often just single skill) and auxiliary or related array.
-* Chosen Focus Skill: one related focus skills.
-* Chosen Auxiliary Skills: two related auxiliary skills.
-* For the chosen focus skill:
-  - Gain rank one in one secondary skill associated with the skill.
-  - Gain rank two in one secondary skill associated with the skill.
-  - Gain skilled proficiency in the skill.
-* For each chosen auxiliary skill:
-  - Gain rank one in two different secondary skills associated with the skill.
-  - Gain access to the novice and skilled training traits for that skill.
-  cost:
-    - access to novice training x3
-    - access to skilled training x3
-    - secondary rank x7
-    - skill rank x2
-
-## Hyper specialized with single auxilary: ??? Needs work if going to be used.
-
-Two arrays", "a focused (often just single skill) and auxiliary or related array.
-* Chosen Focus Skill: one related focus skills.
-* Chosen Auxiliary Skill: one related auxiliary skills.
-* For the chosen focus skill:
-  - Gain rank one in three different secondary skills associated with the skill.
-  - Gain rank two in one secondary skill associated with the skill.
-  - Gain skilled proficiency in the skill.
-* For the chosen auxiliary skill:
-  - Gain rank one in two different secondary skills associated with the skill.
-  - Gain novice proficiency in the skill.
-  - Gain access to the skilled training trait for that skill.
+  Backgrounds each provide:
+  - stamina/willpower/luck points. These are kind of like the gain stamina/willpower/luck traits under the hood, with luck costing 2 trait points, but they cannot be later traded out for other traits at level up.
+  - Starting Wealth (This needs work)
+  - gain two Skill Training traits with a chosen focus skill.
+  - gain two Skill Training traits with a chosen related skill the character is not yet proficient in, if they are proficient in each related skill they may choose to put two ranks into any skill they are not yet proficient in.
+  - traitsGranted: list of other traits a character with this background gains.
+  - traitsOptional: list of other traits a character with this background can choose amungst.
+  - traitsSelectable: how many optional traits the character can select, this number increases by one for each granted trait the character already had that cannot be taken multiple times.
 */
 
 
-/*
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-types
-
-# Common Skilled:
-
-Stamina: cost 1 of 5 each
-Willpower: cost 1 of 5 each
-Luck: cost 2 of 5 each
-
-Starting Wealth Level: unballenced, as it should be temporal.
-
-Language Points: cost 1 of 5 each
-
-List of 5 related skills:
-
-Characters will pick 3 related skills from the list and for each skill picked:
-- Gain 2 'Novice Specialized Training' traits or 'Skilled Specialized Training' traits, if the character is eligile, to be used for that skill.
-- Gain the next level of Training trait for that skill if the character is eligible", "otherwise gain 1 novice or skilled specialized training trait to be used for that skill.
-
-
-Background Trait: Some unique trait ability.
-
-
-# Focused Skilled:
-
-Stamina: cost 1 of 5 each
-Willpower: cost 1 of 5 each
-Luck: cost 2 of 5 each
-
-Starting Wealth Level: unballenced, as it should be temporal.
-
-Language Points: cost 1 of 5 each
-
-List of 2, or more, focused skills:
-
-List of 5 related skills:
-
-Requires that the character already have novice proficiency in one or more focused skill options.
-
-Characters will pick 1 focused skill from the list that:
-- Gain 2 'Novice Specialized Training' traits and one 'Skilled Specialized Training' trait if the character is eligile to be used for that skill .
-- Gain the next level of Training trait for that skill if the character is eligible", "otherwise gain 1 novice or skilled specialized training trait to be used for that skill.
-
-Characters pick 1 related skill from the list that:
-- Gain 2 'Novice Specialized Training' traits or 'Skilled Specialized Training' traits, if the character is eligile, to be used for that skill.
-- Gain the next level of Training trait for that skill if the character is eligible", "otherwise gain 1 novice or skilled specialized training trait to be used for that skill.
-
-
-Background Trait: Some unique trait ability.
-
-
-
-===============================================
-
-All Backgrounds provide:
-Stamina: 1 point each (Gain 1 stamina each)
-Willpower: 1 point each (Gain 1 willpower each)
-Luck: 2 points each (Gain 1 luck each)
-
-Language Points: 1 point each (Gain one linguist trait each)
-
-Starting Wealth Level: unballenced, as it should be temporal.
-
-
-relatedSkills: array of skills the character can select some number of based on tags.
-
-traitsGranted: list of other traits a character with this background gains.
-traitsOptional: list of other traits a character with this background can choose amungst.
-traitsSelectable: how many optional traits the character can select, this number increases by one for each granted trait the character already had that cannot be taken multiple times.
-+++++++++++++++++++++++++++
-
-Skills Tags:
-
-General: choose three related skills, for each:
-  - Gain one novice or skilled specialized training trait in that skill.
-  - Gain one novice or skilled training trait or one novice or skilled specialized training trait in that skill.
-Focused: choose two related skills, for each:
-  - Gain two novice or skilled specialized training trait in that skill.
-  - Gain one novice or skilled training trait or one novice or skilled specialized training trait in that skill.
-Specialized: choose one related skill:
-  - Gain 4 novice or skilled specialized training trait in that skill.
-  - Gain 1 novice, skilled, or expert specialized training trait in that skill.
-  - Gain one novice, skilled, or expert training trait or one novice or skilled specialized training trait in that skill.
-
-  ++++++++++++++++++++++++++++++++++++++
-
-  {
+const backgrounds = {
+  exampleKey: {
     displayName: "",
-    tags: ["General Focused Specialized"],
+    tags: [],
     description: "",
     luck: 0,
-    stamina: 3,
-    willpower: 2,
-    languagePoints: 0,
-    startingWealth: 1,
-    relatedSkills: ["discipline", "melee combat", "personal defense", "personal movement", "physical conditioning"],
+    stamina: 0,
+    willpower: 0,
+    startingWealth: 0,
+    focusedSkills: [],
+    relatedSkills: [],
     traitsGranted: [],
-    traitsOptional: [],
-    traitsSelectable: [],
-    apply: character => {
-      console.log(character);
-    }
+    traitsOptional: ["Skilled Training (focused skill)"],
+    traitsSelectable: 1
   },
-*/
-
-
-const commonSkillBackgrounds = {
   athlete: {
     displayName: "Athlete",
-    tags: ["background", "focused"],
+    tags: [],
     description: "",
     luck: 0,
-    stamina: 3,
-    willpower: 2,
-    startingWealth: 1,
-    languagePoints: 0,
-    focusSkills: ["personal movement", "physical conditioning"],
-    auxiliarySkills: ["discipline", "melee combat", "personal defense", "personal movement", "physical conditioning"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    },
-    apply: character => {
-      console.log(character);
-    }
+    stamina: 2,
+    willpower: 0,
+    startingWealth: 0,
+    focusedSkills: ["personal movement", "physical conditioning"],
+    relatedSkills: ["discipline", "melee combat", "personal defense", "personal movement", "physical conditioning"],
+    traitsGranted: [],
+    traitsOptional: ["Determined", "Healthy", "Skilled Training (related skill)"],
+    traitsSelectable: 2
+  },
+  berserker: {
+    displayName: "Berserker",
+    tags: [],
+    description: "",
+    luck: 0,
+    stamina: 2,
+    willpower: 0,
+    startingWealth: 0,
+    focusedSkills: ["melee combat", "personal movement"],
+    relatedSkills: ["awareness", "melee combat", "personal movement", "physical conditioning", "survival"],
+    traitsGranted: [],
+    traitsOptional: ["Fueled by Pain", "Reckless Attacker", "Skilled Training (related skill)"],
+    traitsSelectable: 2
   },
   criminal: {
     displayName: "Criminal",
-    tags: ["background", "common skilled"],
+    tags: [],
     description: "",
     luck: 1,
-    stamina: 1,
-    willpower: 2,
-    startingWealth: 1,
-    languagePoints: 0,
+    stamina: 0,
+    willpower: 0,
+    startingWealth: 0,
+    focusedSkills: ["awareness", "legerdemain"],
     relatedSkills: ["awareness", "legerdemain", "performance", "personal movement", "stealth"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    },
-    apply: character => {
-      console.log(character);
-    }
+    traitsGranted: [],
+    traitsOptional: ["Danger Sense", "Skilled Training (related skill)"],
+    traitsSelectable: 2
   },
   cultist: {
     displayName: "Cultist",
-    tags: ["background", "common skilled"],
+    tags: [],
     description: "There are many cults on Flax dedicated to some dweller, ohma, or immortal or another and even a few that follow individuals they believe to be some fabled hero. Cults provide vital services to the towns of Flax often supplying much needed story telling and medical attention to the populace.",
     luck: 0,
-    stamina: 1,
+    stamina: 0,
     willpower: 2,
-    startingWealth: 1,
-    languagePoints: 2,
+    startingWealth: 0,
+    focusedSkills: ["knowledge (lore)", "medicine"],
     relatedSkills: ["alchemy", "craft (artist)", "knowledge (academics)", "knowledge (lore)", "medicine"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: ["Linguist"],
+    traitsOptional: ["Linguist", "Skilled Training (related skill)"],
+    traitsSelectable: 1
   },
   doctor: {
     displayName: "Doctor",
-    tags: ["background", "focused"],
+    tags: [],
+    description: "",
+    luck: 0,
+    stamina: 0,
+    willpower: 1,
+    startingWealth: 0,
+    focusedSkills: ["medicine"],
+    relatedSkills: ["alchemy", "discipline", "knowledge (academics)", "survival"],
+    traitsGranted: ["Linguist", "Skilled Training (medicine)"],
+    traitsOptional: ["Hardy", "Skilled Training (focused skill)"],
+    traitsSelectable: 1
+  },
+  duelist: {
+    displayName: "Duelist",
+    tags: [],
     description: "",
     luck: 1,
-    stamina: 2,
-    willpower: 1,
-    startingWealth: 1,
-    languagePoints: 0,
-    focusSkills: ["medicine"],
-    auxiliarySkills: ["alchemy", "discipline", "knowledge (academics)", "survival"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    },
-    apply: character => {
-      console.log(character);
-    }
+    stamina: 0,
+    willpower: 0,
+    startingWealth: 0,
+    focusedSkills: ["melee combat", "personal defense"],
+    relatedSkills: ["awareness", "discipline", "legerdemain", "melee combat", "personal defense"],
+    traitsGranted: [],
+    traitsOptional: ["Duelist", "Quick Draw", "Skilled Training (focused skill)"],
+    traitsSelectable: 2
   },
   entertainer: {
     displayName: "Entertainer",
-    tags: ["background", "common skilled"],
+    tags: [],
     description: "Actors, orators, musicians, street magicians and the like are all various forms of performers that can be found in any large city or traveling show.",
-    luck: 1,
+    luck: 0,
     stamina: 1,
     willpower: 1,
-    startingWealth: 2,
-    languagePoints: 1,
+    startingWealth: 0,
+    focusedSkills: ["craft (artist)", "performance"],
     relatedSkills: ["animal handling", "craft (artist)", "legerdemain", "performance", "physical conditioning"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: [],
+    traitsOptional: ["Fast Reflexes", "Linguist", "Skilled Training (related skill)", "Quick Draw"],
+    traitsSelectable: 2
   },
   gambler: {
     displayName: "Gambler",
-    tags: ["background", "common skilled"],
+    tags: [],
     description: "A gambler is someone who has a history of taking risks, they might be a scoundral who is most at home playing cards in some tavern basement, a merchant who puts his fortune on the line to make more money, or an acrobat who performs ever more daring feats without a proper safety net.",
     luck: 2,
     stamina: 0,
-    willpower: 1,
-    startingWealth: 2,
-    languagePoints: 0,
+    willpower: 0,
+    startingWealth: 0,
+    focusedSkills: ["legerdemain", "knowledge (lore)"],
     relatedSkills: ["awareness", "knowledge (lore)", "legerdemain", "performance", "stealth"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: [],
+    traitsOptional: [],
+    traitsSelectable: 0
   },
   hunter: {
     displayName: "Hunter",
-    tags: ["background", "common skilled"],
+    tags: [],
     description: "Those who have experience capturing or killing creatures regardless of method. A hunter may use traps to protect their farm, a bow feed their family, or their own wits to bring in criminals with bounties on their heads.",
     luck: 1,
     stamina: 1,
-    willpower: 1,
-    startingWealth: 1,
-    languagePoints: 1,
+    willpower: 0,
+    startingWealth: 0,
+    focusedSkills: ["survival", "stealth"],
     relatedSkills: ["animal handling", "personal movement", "craft (woodworker)", "survival", "stealth", "ranged combat"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: [],
+    traitsOptional: ["Ambusher", "Determined", "Skilled Training (focused skill)"],
+    traitsSelectable: 1
   },
   laborer: {
     displayName: "Laborer",
-    tags: ["background", "common skilled"],
-    description: "Farmers, bricklayers, cooks, and carpenters from the lowly field worder to the owner of a small homestead, they all have one thing in common, they work for a living. Physical labor of some kind has provided a wealth of experience to these individuals.",
+    tags: [],
+    description: "",
     luck: 0,
-    stamina: 4,
-    willpower: 1,
-    startingWealth: 1,
-    languagePoints: 0,
+    stamina: 3,
+    willpower: 0,
+    startingWealth: 0,
+    focusedSkills: ["animal handling", "craft (cooking)", "craft (mason)", "craft (woodworker)", "physical conditioning"],
     relatedSkills: ["animal handling", "craft (cooking)", "craft (mason)", "craft (woodworker)", "physical conditioning"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: [],
+    traitsOptional: ["Hardy", "Healthy", "Skilled Training (focused skill)"],
+    traitsSelectable: 1
   },
   leviedSoldier: {
     displayName: "Levied Soldier",
-    tags: ["background", "common skilled"],
+    tags: [],
     description: "Whatever your profession if your poor enough, or your local lords in need enough nearly anyone can become a levied soldier at some point in their lives. They've been handed a spear, drilled until you were ready to drop, and sent to fight in some battle they couldn't possibly understand the true reasons for.",
     luck: 0,
-    stamina: 3,
+    stamina: 2,
     willpower: 1,
     startingWealth: 0,
-    languagePoints: 1,
+    focusedSkills: ["melee combat", "physical conditioning"],
     relatedSkills: ["craft (mason)", "craft (smith)", "melee combat", "personal defense", "physical conditioning"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: [],
+    traitsOptional: ["Reckless Attacker", "Skilled Training (focused skill)"],
+    traitsSelectable: 1
   },
   nobility: {
-    displayName: "nobility",
-    tags: ["background", "common skilled"],
+    displayName: "Nobility",
+    tags: [],
     description: "Being born into a household of priveledge comes with a host of expectations and and responsibilities but, generally, also with a basic education.",
     luck: 0,
-    stamina: 1,
-    willpower: 2,
-    startingWealth: 3,
-    languagePoints: 2,
-    relatedSkills: ["discipline", "knowledge (academics)", "knowledge (lore)", "melee combat", "personal defense"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    stamina: 0,
+    willpower: 1,
+    startingWealth: 0,
+    focusedSkills: ["discipline", "performance"],
+    relatedSkills: ["discipline", "knowledge (academics)", "knowledge (lore)", "melee combat", "performance", "personal defense"],
+    traitsGranted: ["Linguist"],
+    traitsOptional: ["Dual Weilder", "Linguist", "Skilled Training (related skill)"],
+    traitsSelectable: 2
   },
   professionalSoldier: {
     displayName: "Professional Soldier",
-    tags: ["background", "focused"],
+    tags: [],
     description: "",
-    luck: 1,
+    luck: 0,
     stamina: 2,
     willpower: 1,
-    startingWealth: 1,
-    languagePoints: 0,
-    focusSkills: ["meleeCombat", "Ranged Combat"],
-    auxiliarySkills: ["melee combat", "personal defense", "personal movement", "physical conditioning", "ranged combat"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    },
-    apply: character => {
-      console.log(character);
-    }
+    startingWealth: 0,
+    focusedSkills: ["meleeCombat", "Ranged Combat"],
+    relatedSkills: ["discipline", "melee combat", "personal defense", "physical conditioning", "ranged combat"],
+    traitsGranted: [],
+    traitsOptional: ["Combat Reflexes", "Skilled Training (focused skill)"],
+    traitsSelectable: 1
+  },
+  pugilist: {
+    displayName: "Pugilist",
+    tags: [],
+    description: "",
+    luck: 0,
+    stamina: 1,
+    willpower: 1,
+    startingWealth: 0,
+    focusedSkills: ["meleeCombat", "physicalConditioning"],
+    relatedSkills: ["discipline", "melee combat", "performance", "personal defense", "physical conditioning"],
+    traitsGranted: [],
+    traitsOptional: ["Duelist", "Fueled by Pain", "Skilled Training (focused skill)"],
+    traitsSelectable: 2
+  },
+  ranger: {
+    displayName: "Ranger",
+    tags: [],
+    description: "",
+    luck: 0,
+    stamina: 1,
+    willpower: 1,
+    startingWealth: 0,
+    focusedSkills: ["personal movement", "survival"],
+    relatedSkills: ["awareness", "discipline", "personal movement", "survival", "ranged combat"],
+    traitsGranted: [],
+    traitsOptional: ["Fast Reflexes", "Mobile Combatant", "Skilled Training (focused skill)"],
+    traitsSelectable: 2
   },
   servant: {
     displayName: "Servant",
-    tags: ["background", "common skilled"],
-    description: "Wealthy household's of nobles and citizens in nearly every nation upon Flax imploy service workers of some kind from cooks and maids to gardeners and stable workers.",
-    luck: 1,
+    tags: [],
+    description: "Wealthy household's of nobles, citizens, and merchants in nearly every nation upon Flax imploy service workers of some kind from cooks and maids to gardeners and stable workers",
+    luck: 0,
     stamina: 1,
     willpower: 1,
-    startingWealth: 1,
-    languagePoints: 1,
+    startingWealth: 0,
+    focusedSkills: ["animal handling", "awareness", "craft (cooking)", "discipline", "knowledge (academics)", "medicine", "performance"],
     relatedSkills: ["animal handling", "awareness", "craft (cooking)", "discipline", "knowledge (academics)", "medicine", "performance"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: [],
+    traitsOptional: ["Linguist", "Skilled Training (focused skill)"],
+    traitsSelectable: 2
+  },
+  scout: {
+    displayName: "Scout",
+    tags: [],
+    description: "",
+    luck: 0,
+    stamina: 1,
+    willpower: 1,
+    startingWealth: 0,
+    focusedSkills: ["awareness", "personal movement"],
+    relatedSkills: ["awareness", "personal defense", "personal movement", "stealth", "survival"],
+    traitsGranted: [],
+    traitsOptional: ["Mobile Combatant", "Skilled Training (focused skill)"],
+    traitsSelectable: 2
   },
   skilledCrafter: {
     displayName: "Skilled Crafter",
-    tags: ["background", "focused"],
+    tags: [],
     description: "Not all workers are simple laborers many have honed their craft to such levels that they could make a living in most villages where they're skills are in demand.",
     luck: 1,
-    stamina: 2,
+    stamina: 1,
     willpower: 1,
-    startingWealth: 2,
-    languagePoints: 0,
-    focusSkills: ["craft (artist)", "craft (cooking)", "craft (mason)", "craft (smith)", "craft (woodworker)"],
-    auxiliarySkills: ["craft (artist)", "craft (cooking)", "craft (mason)", "craft (smith)", "craft (woodworker)"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    },
-    apply: character => {
-      console.log(character);
-    }
+    startingWealth: 0,
+    focusedSkills: ["craft (artist)", "craft (cooking)", "craft (mason)", "craft (smith)", "craft (woodworker)"],
+    relatedSkills: ["craft (artist)", "craft (cooking)", "craft (mason)", "craft (smith)", "craft (woodworker)"],
+    traitsGranted: [],
+    traitsOptional: ["Skilled Training (focused skill)"],
+    traitsSelectable: 0
   },
   sniper: {
     displayName: "Sniper",
-    tags: ["background", "focused"],
+    tags: [],
     description: "",
-    luck: 1,
-    stamina: 2,
+    luck: 0,
+    stamina: 1,
     willpower: 1,
-    startingWealth: 1,
-    languagePoints: 0,
-    auxiliarySkills: ["animal handling", "awareness", "personal movement", "survival", "ranged combat"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    },
-    apply: character => {
-      console.log(character);
-    }
+    startingWealth: 0,
+    focusedSkills: ["ranged combat"],
+    relatedSkills: ["awareness", "personal movement", "survival"],
+    traitsGranted: [],
+    traitsOptional: ["Ambusher", "Combat Reflexes", "Skilled Training (focused skill)"],
+    traitsSelectable: 2
   },
   tutoredStudent: {
     displayName: "Tutored Student",
-    tags: ["background", "focused"],
+    tags: [],
     description: "Ambitious or wealthy heads of households might higher private tutors for they're children or even send them off to an accadamy for an education.",
-    luck: 1,
-    stamina: 2,
-    willpower: 1,
-    startingWealth: 1,
-    languagePoints: 0,
-    auxiliarySkills: ["alchemy", "craft (artist)", "discipline", "knowledge (academics)", "knowledge (lore)"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    },
-    apply: character => {
-      console.log(character);
-    }
+    luck: 0,
+    stamina: 0,
+    willpower: 2,
+    startingWealth: 0,
+    focusedSkills: ["alchemy", "knowledge (academics)", "knowledge (lore)"],
+    relatedSkills: ["alchemy", "craft (artist)", "discipline", "knowledge (academics)", "knowledge (lore)"],
+    traitsGranted: ["Linguist"],
+    traitsOptional: ["Linguist", "Skilled Training (related skill)"],
+    traitsSelectable: 1
   },
   urchin: {
     displayName: "Urchin",
-    tags: ["background", "common skilled"],
+    tags: [],
     description: "Growing up on the streets is a death sentence to many, a good way to become a slave for others but some strive in this element as ciminals, workers, or performers.",
     luck: 1,
-    stamina: 1,
-    willpower: 2,
+    stamina: 0,
+    willpower: 0,
     startingWealth: 0,
-    languagePoints: 0,
+    focusedSkills: ["awareness", "stealth"],
     relatedSkills: ["awareness", "legerdemain", "medicine", "personal defense", "personal movement", "stealth", "survival"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: [],
+    traitsOptional: ["Danger Sense", "Skilled Training (related skill)"],
+    traitsSelectable: 2
   },
   warrior: {
     displayName: "Warrior",
-    tags: ["background", "common skilled"],
+    tags: [],
     description: "Soldiers, crime inforcers, gladiators, rangers, squires, and just about any one who grew up scrappy can make claim to the warrior background.",
-    luck: 1,
+    luck: 0,
     stamina: 2,
     willpower: 1,
-    startingWealth: 1,
-    languagePoints: 0,
+    startingWealth: 0,
+    focusedSkills: ["melee combat", "ranged combat"],
     relatedSkills: ["craft (smith)", "medicine", "melee combat", "personal defense", "physical conditioning", "ranged combat"],
-    trait: {
-      name: "",
-      description: "",
-      apply: ""
-    }
+    traitsGranted: [],
+    traitsOptional: ["Dual Weilder", "Healthy", "Skilled Training (related skill)"],
+    traitsSelectable: 1
   }
 };
 
+const printBackgroundData = true;
 
-/*
-'animalHandling'", "        trainer
-'alchemy'", "               tutoredStudent
-'awareness'", "             sniper
-'craftArtist'", "           skilledCrafter
-'craftChemistry'", "        skilledCrafter
-'craftCooking'", "          skilledCrafter
-'craftMason'", "            skilledCrafter
-'craftSmith'", "            skilledCrafter
-'craftWoodworker'", "       skilledCrafter
-'discipline'", "            performer             trainer
-'knowledgeAcademics'", "    tutoredStudent
-'knowledgeLore'", "         tutoredStudent
-'legerdemain'", "           criminal
-'medicine'", "              doctor
-'magicalAptitude',
-'meleeCombat'", "           professionalSoldier
-'performance'", "           performer
-'personalDefense'", "       professionalSoldier
-'personalMovement'", "      athlete
-'physicalConditioning'", "  athlete
-'rangedCombat'", "          sniper
-'stealth'", "               criminal
-'survival'                doctor
-*/
+if (printBackgroundData) {
+  const grantedTraits = {};
+  const optionalTraits = {};
+  const focusedSkillsList = {};
+  const relatedSkillsList = {};
+  const focusSkillSets = {};
 
-const backgrounds = {...commonSkillBackgrounds};
+  for (const key in backgrounds) {
+    if (!backgrounds.hasOwnProperty(key)) continue;
+    if (key === "exampleKey") continue;
 
-const count = {};
+    const background = backgrounds[key];
 
-for (const background in backgrounds) {
-  const {relatedSkills} = backgrounds[background];
-  for (const skill of relatedSkills) {
-    if (!count[skill]) count[skill] = 0;
-    count[skill] = count[skill] + 1;
+    const {displayName = "", luck = 0, stamina = 0, willpower = 0, focusedSkills = [], relatedSkills = [], traitsGranted = [], traitsSelectable = 0, traitsOptional = []} = background;
+
+    const pointsTotal = 4 + (luck * 2) + stamina + willpower + traitsGranted.length + traitsSelectable;
+
+    if (pointsTotal !== 8) console.log(`${displayName} has ${pointsTotal} instead of 8.`);
+
+    for (const trait of traitsGranted) {
+      if (!grantedTraits[trait]) grantedTraits[trait] = 0;
+      grantedTraits[trait]++;
+    }
+
+    for (const trait of traitsOptional) {
+      if (!optionalTraits[trait]) optionalTraits[trait] = 0;
+      optionalTraits[trait]++;
+    }
+
+    for (const trait of focusedSkills) {
+      if (!focusedSkillsList[trait]) focusedSkillsList[trait] = 0;
+      focusedSkillsList[trait]++;
+    }
+
+    for (const trait of relatedSkills) {
+      if (!relatedSkillsList[trait]) relatedSkillsList[trait] = 0;
+      relatedSkillsList[trait]++;
+    }
+
+    const focusSkillSet = focusedSkills.join(" - ");
+    if (!focusSkillSets[focusSkillSet]) focusSkillSets[focusSkillSet] = 0;
+    focusSkillSets[focusSkillSet]++;
   }
 
+  console.log('\n\n       Granted Trait Counts');
+  Object.keys(grantedTraits).sort()
+    .forEach((item) => {
+      console.log(`${item}: ${grantedTraits[item]}`);
+    });
+
+
+  console.log('\n\n       Optional Trait Counts');
+  Object.keys(optionalTraits).sort()
+    .forEach((item) => {
+      console.log(`${item}: ${optionalTraits[item]}`);
+    });
+
+  console.log('\n\n       Focused Skills Count');
+  Object.keys(focusedSkillsList).sort()
+    .forEach((item) => {
+      console.log(`${item}: ${focusedSkillsList[item]}`);
+    });
+
+  console.log('\n\n       Related Skills Count');
+  Object.keys(relatedSkillsList).sort()
+    .forEach((item) => {
+      console.log(`${item}: ${relatedSkillsList[item]}`);
+    });
+
+  console.log('\n\n       Focus Skill Sets Count');
+  Object.keys(focusSkillSets).sort()
+    .forEach((item) => {
+      console.log(`${item}: ${focusSkillSets[item]}`);
+    });
 }
-
-for (const background in backgrounds) {
-  const {relatedSkills} = backgrounds[background];
-
-  if (relatedSkills.length > 5) console.log(`${background} has ${relatedSkills.length - 5} too many skills.`);
-
-}
-
-console.log(count);
-
-
-
-// console.log(`${Object.keys(commonSkillBackgrounds).length} common simple backgrounds to select from.`);
-// console.log(Object.keys(commonSkillBackgrounds));
-//
-// console.log(`${Object.keys(commonFocusedSkillBackgrounds).length} common focused backgrounds to select from.`);
-// console.log(Object.keys(commonFocusedSkillBackgrounds));
 
 module.exports = backgrounds;
