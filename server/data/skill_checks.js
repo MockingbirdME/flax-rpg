@@ -1,4 +1,4 @@
-const primaryAttributesData = {
+const skillChecks = {
   alertness: {
     displayName: "Alertness",
     primaryAttribute: ["Perception"],
@@ -518,4 +518,4 @@ const primaryAttributesData = {
   }
 };
 
-module.exports = primaryAttributesData;
+module.exports = skillChecks;

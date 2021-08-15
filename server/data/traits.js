@@ -67,7 +67,7 @@ const traitsData = {
     requirementsDescription: "",
     keywords: ["Simple"],
     description: `
-    The character improves aptitude in a selected skill or one of its secondary skills. If the character meets the secondary skill ranks requirement to increase the skill's proviciency level do so; otherwise, increase one eligible secondary skill by one rank.
+    The character improves aptitude in a selected skill or one of its secondary skills. If the character meets the secondary skill ranks requirement to increase the skill's proficiency level do so; otherwise, increase one eligible secondary skill by one rank.
     Proficiency requirements and limits
     | Proficiency | Required Secondary Ranks | Max Secondary Rank |
     | --- | --- | --- |
@@ -394,6 +394,152 @@ const traitsData = {
         3 - The character may spend an additional stamina and defense when they use this ability to gain a second bonus die on this skill check.
         4 - The character may spend an additional stamina and defense when they use this ability to gain the bonus dice on all eligible melee attacks they make this turn.
     `,
+    isCharacterEligible: character => {
+      // TODO make this work
+    },
+    apply: character => {
+      // TODO make this work.
+    }
+  },
+
+  /* ++++++++++++++++ ARCANE TRAITS ++++++++++++++++ */
+
+  dependentMage: {
+    displayName: "Dependent Mage",
+    type: "Mage",
+    requirements: [],
+    requirementsDescription: "no other Mage traits the first time this trait is taken or the requirements for at least one upgrade for this trait for subsequent times this trait is taken",
+    keywords: ["Heroic"],
+    description:
+      "The character can utilize magic so long as they have arcane essense in their system. When the character takes the Skill Training trait and gains a level in a Magical Aptitude secondary skill they may select one Arcane Power associated with that secondary skill to learn they may then choose a different magical aptitude secondary skill they have at least 1 rank in to increase by 1 rank. The character adds a penalty die to their cast spell, gather, or shape arcane energy skill checks if they have gone 24 hours without consuming arcane essense and cannot make cast spell, gather, or shape arcane energy skill checks at all if they've gone a full span of days without consuming arcane essense.",
+    upgrades: {
+      cleanEssenseAbsorption: {
+        displayName: "Clean Essense Absorption",
+        type: "Add-on",
+        requirementsDescription: "none",
+        description:
+          "When the arcane essense you've consumed wears off you do not suffer the additoinal random max stamina loss.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      essensePoweredMagic: {
+        displayName: "Essense Powered Magic",
+        type: "Add-on",
+        requirementsDescription: "none.",
+        description:
+          "When you would suffer arcane dues and have consumed arcane essense in the last 24 hours you may spend a point of max stamina to reduce those dues by 5 <BALANCE THIS REDUCTION>.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      passivePower: {
+        displayName: "Passive Power",
+        type: "Add-on",
+        requirementsDescription: "At least 1 rank in a magical aptitude secondary skill that they have no gained the passive ability from.",
+        description:
+          "Choose a magical aptitude secondary skill you have at least one rank in and have not yet gained its passive ability to gain its passive ability.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      spells: {
+        displayName: "Spells",
+        type: "Add-on",
+        requirementsDescription: "none.",
+        description:
+          "The character may build and prepare a number of spells equal to their rank in the magical aptitude skill plus the number of times they have taken this upgrade.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      more: {
+        displayName: "TODO add a few more",
+        type: "Add-on",
+        requirementsDescription: ".",
+        description:
+          "Need at least one or two options that allow the caster to take in more arcane essense and spend the arcane essense in their system.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      }
+    },
+    isCharacterEligible: character => {
+      // TODO make this work
+    },
+    apply: character => {
+      // TODO make this work.
+    }
+  },
+  expandedSpellList: {
+    displayName: "Expanded Spell List",
+    type: "Mage",
+    requirements: [],
+    requirementsDescription: "Knowledge of at least one spell.",
+    keywords: ["Simple"],
+    description:
+      "This trait may be taken any number of times, each time it is taken the character increases the number of spells they know by one."
+  },
+  learnedMage: {
+    displayName: "Learned Mage",
+    type: "Mage",
+    requirements: [],
+    requirementsDescription: "no other Mage traits the first time this trait is taken or the requirements for at least one upgrade for this trait for subsequent times this trait is taken",
+    keywords: ["Heroic"],
+    description:
+      "The character can utilize magic they have studied. Choose one Magical Aptitude secondary skill to learn the Arcane Powers and any cantrips associated with it.",
+    upgrades: {
+      multidisciplinaryStudies: {
+        displayName: "Multidisciplinary Studies",
+        type: "Add-on",
+        requirementsDescription: "At least novice proficiency in the  knowledge (academics) or knowledge (lore) skills.",
+        description:
+          "The character learns the Arcane Powers and cantrips associated with a Magical Aptitude secondary skill. This trait can be taken a number of times equal to one plus the product of the levels of proficiency in the knowledge (academics) and knowledge (lore) skills.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      experiencedSpellcrafter: {
+        displayName: "Experienced Spellcrafter",
+        type: "Add-on",
+        requirementsDescription: "Knowledge of at least one spell and at least experienced proficiency in Magical Aptitude.",
+        description:
+          "Double the number of spells you know.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      finesseCasting: {
+        displayName: "finesseCasting",
+        type: "Add-on",
+        requirementsDescription: "Knowledge of at least one spell and at least novice proficiency in Magical Aptitude.",
+        description:
+          "When you make a cast spell skill check you may choose to increase the difficulty by .",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      practicedSpellcaster: {
+        displayName: "Practiced Spellcaster",
+        type: "Add-on",
+        requirementsDescription: "At least novice proficiency in Magical Aptitude.",
+        description:
+          "The character may build and prepare one spell for each level of proficiency they have in the magical aptitude skill.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      },
+      more: {
+        displayName: "TODO add a few more",
+        type: "Add-on",
+        requirementsDescription: ".",
+        description:
+          "Need at least one or two options that allow the caster to take in more arcane essense and spend the arcane essense in their system.",
+        isCharacterEligible: character => {
+          // TODO make this work
+        }
+      }
+    },
     isCharacterEligible: character => {
       // TODO make this work
     },

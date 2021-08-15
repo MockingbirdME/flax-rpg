@@ -1,4 +1,4 @@
-let skillsData = {
+const skills = {
   animalHandling: {
     displayName: "Animal Handling",
     description:
@@ -457,6 +457,6 @@ let skillsData = {
   }
 };
 
-console.log(`${Object.keys(skillsData).length} skills to select from.`);
-console.log(Object.keys(skillsData));
-module.exports = skillsData;
+console.log(`${Object.keys(skills).length} skills to select from.`);
+console.log(Object.keys(skills));
+module.exports = skills;
