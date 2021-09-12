@@ -21,8 +21,6 @@ const PAYLOAD_LIMIT = '5mb';
 app.use(express.json({limit: PAYLOAD_LIMIT}));
 app.use(express.urlencoded({extended: false, limit: PAYLOAD_LIMIT}));
 
-// Console.log that your server is up and running
-// db.sequelize.sync().then(() => http.createServer(app).listen(app.get('port'), () => console.log(`Listening on port ${port} TEST`)));
 app.listen(port, () => console.log(`Listening on port ${port} TEST`));
 
 app.use(express.static("client/build", {index: false}));
