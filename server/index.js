@@ -4,6 +4,7 @@ const SkillChecks = require("./data/skill_checks.js");
 const Skills = require("./data/skills.js");
 const Strains = require("./data/strains.js");
 const Traits = require("./data/traits.js");
+// const Spec = require("./data/spec.yaml");
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -13,7 +14,9 @@ const createError = require('http-errors');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 
-const swaggerDoc = YAML.load('./api/v1/spec.yml');
+console.log(path.resolve(__dirname, './data/spec.yaml'));
+console.log('WTF');
+const swaggerDoc = YAML.load(path.resolve(__dirname, './api/v1/spec.yaml'));
 const swaggerOpts = {customCss: '.servers {display: none}'};
 
 // Parse queries and parameters.
