@@ -16,7 +16,7 @@ const YAML = require('yamljs');
 
 console.log(path.resolve(__dirname, './data/spec.yaml'));
 console.log('WTF');
-const swaggerDoc = YAML.load(path.resolve(__dirname, './api/v1/spec.yaml'));
+const swaggerDoc = YAML.load(path.resolve(__dirname, './api/v1-old/spec.yaml'));
 const swaggerOpts = {customCss: '.servers {display: none}'};
 
 // Parse queries and parameters.
@@ -37,7 +37,7 @@ app.get('/api-docs/swagger.json', (req, res) => {
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, swaggerOpts));
 
 // Connect the API
-app.use('/api/v1', require('./api/v1/index'));
+// app.use('/api/v1', require('./api/v1/index'));
 app.use('/api', (req, res, next) => next(createError(404, "You must specify a valid API version. Ex: `/api/v1`.")));
 
 
