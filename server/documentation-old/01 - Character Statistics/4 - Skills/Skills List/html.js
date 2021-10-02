@@ -1,21 +1,15 @@
-let data = require('../../../../data/skills.js');
+const data = require('../../../../data/skills.js');
 
-let html = `<div class="rules_list">`;
+const skillsHtml = Object.keys(data).map(skillKey => {
+  const { displayName, description, secondarySkills } = data[skillKey];
+  const secondarySkillsHtml = Object.keys(secondarySkills).map(secondarySkillKey => {
+    const {displayName, description} = secondarySkills[secondarySkillKey];
+    return `<li><b>${displayName} - </b>${description}</li>`;
+  });
 
-for (let skillKey in data) {
-    let skill = data[skillKey];
-    html += `<div class="skillList__${skillKey}"><h4>${skill.displayName}</h4><p>${skill.description}</p><p><b>Secondary Skills:</b></p><ul>`;
+  return `<div class="skillList__${skillKey}"><h4>${displayName}</h4><p>${description}</p><p><b>Secondary Skills:</b></p><ul>${secondarySkillsHtml.join("")}</ul></div>`;
+});
 
-    for (let secondarySkillKey in skill.secondarySkills) {
-        let secondarySkill = skill.secondarySkills[secondarySkillKey];
-        if (secondarySkill.displayName) {
-            html += `<li><b>${secondarySkill.displayName} - </b>${secondarySkill.description}</li>`;
-        }
-    }
-    html += `</ul></div>`;
-}
+const returnHtml = `<div class="rules_list">${skillsHtml.join("")}</div>`;
 
-
-html += `</div>`;
-
-module.exports = html;
+module.exports = returnHtml;
