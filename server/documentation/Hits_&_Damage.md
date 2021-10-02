@@ -51,7 +51,7 @@ There are three types of wounds a character might suffer:
 * Mortal wound - the character takes a number of wounds equal to their max wounds
 
 #### Effects of being wounded
-Each time a character suffers a wound reduce their max defense, and max stamina, and max willpower by one; additionally, characters suffer progressively sever conditions depending on how badly wounded they are:
+Each time a character suffers a wound reduce their max defense, max stamina, and max willpower by one; additionally, characters suffer progressively sever conditions depending on how badly wounded they are:
 * **Wounded, Lightly -** A character who has suffered at least one wound is light wounded.
 * **Wounded, Severely -** A character who has suffered at least half their *max wounds* is severely wounded.
 * **Wounded, Mortally -** A character has suffered a number of wounds equal to their *max wounds* is mortally wounded.
@@ -64,9 +64,9 @@ Each time a character suffers a wound reduce their max defense, and max stamina,
 * **Fatigued 1 -** When the character spends one or more stamina, they must spend an additional one stamina or willpower.
 * **Fatigued 2 -** When the character spends one or more stamina or willpower, they must spend an additional one stamina or willpower.
 * **Fatigued 3 -** When the character spends one or more stamina, max stamina, willpower, or max willpower, they must spend an additional one max stamina or max willpower.
-* **Wounded, Lightly -** The character can not recover the max stamina or defense lost by having suffered wounds.
-* **Wounded, Severely -** The character can not recover the max stamina or defense lost by having suffered wounds and gains one penalty die to each of their skill checks.
-* **Wounded, Mortally -** The character can not recover the max stamina or defense lost by having suffered wounds and gains two penalty dice to each of their skill checks. Additionally, unless they are stabilized they must make a <SOME KIND OF SKILL CHECK where a failure means suffering an additional wound, a near success means losing max stamina, a success is the loss of one stamina, difficulty of the check should increase based on the character's actions that turn> each round.
+* **Wounded, Lightly -** The character can not recover the max stamina, max defense, or max willpower lost as a result of having suffered wounds.
+* **Wounded, Severely -** The gains one penalty die to each of their skill checks.
+* **Wounded, Mortally -** The gains an additional penalty die to each of their skill checks. Additionally, unless they are stabilized they must make a <SOME KIND OF SKILL CHECK where a failure means suffering an additional wound, a near success means losing max stamina, a success is the loss of one stamina, difficulty of the check should increase based on the character's actions that turn> each round.
 * **Dying -** The character can not recover the max stamina or defense lost by having suffered wounds and gains two penalty dice to each of their skill checks, these penalty die cannot be reduced or ignored by spending willpower. Additionally, unless they are stabilized they must make a <SOME KIND OF SKILL CHECK where a failure means death, a near success is an extra wound, a success is the loss of one max stamina, difficulty of the check should increase based on the character's actions that turn> each round.
 
 

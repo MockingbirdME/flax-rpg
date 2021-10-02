@@ -115,4 +115,4 @@ const resourceAttributes = {
   }
 };
 
-export { primaryAttributes, secondaryAttributes, resourceAttributes };
+module.exports = { primaryAttributes, secondaryAttributes, resourceAttributes };

@@ -1,0 +1,38 @@
+
+.coreRules__Container {
+    width: 80vw;
+    margin: 0 10vw;
+    display: inline-flex;
+}
+
+.sideBar {
+    top: 2rem;
+    position: sticky;
+    border: 1px solid black;
+    margin: 2rem 2rem 2rem 0;
+    min-width: calc(40vw - 20rem);
+    height: 25rem;
+    text-align: center;
+}
+
+.coreRules {
+    max-width: 40rem;
+}
+
+.rules_list h4{
+    margin-bottom: .3rem;
+}
+.rules_list h3{
+    margin-bottom: .5rem;
+}
+.rules_list p {
+    margin: .5rem 0 0;
+}
+.rules_list ul {
+    margin: 0;
+}
+
+.traits_list {
+    list-style-type: none;
+    padding: 0;
+}

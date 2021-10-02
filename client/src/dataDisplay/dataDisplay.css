@@ -1,0 +1,183 @@
+
+.dataDisplay__container {
+    width: 80vw;
+    margin: auto;
+
+}
+
+.dataDisplay__title__container {
+    border-bottom: 3px #660066 solid;
+    padding: 2rem 0;
+    height: 2rem;
+}
+.dataDisplay__title {
+    float: left;
+    margin: 0;
+}
+
+
+
+.dataDisplay__list__container sgv {
+    min-width: 2rem;
+}
+
+
+.dataDisplay__list__container__2 .dataDisplay__list__content__container {
+    display: flex;
+}
+.dataDisplay__list__container__2 .dataDisplay__list__content__container > div:first-of-type {
+    min-width: 10rem;
+    width: calc(40vw - 20rem);
+}
+.dataDisplay__list__container__2 .dataDisplay__list__content__container > div:nth-of-type(2) {
+    border: 1px solid;
+    width: calc(80% - 3rem);
+    max-width: 40rem;
+    padding: 1rem;
+    margin: -1rem auto;
+}
+.dataDisplay__list__container__2 .dataDisplay__list__content__container > div:nth-of-type(2) .placeholderText {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.dataDisplay__list__container__2 .dataDisplay__list__content__container > div:nth-of-type(2) {
+    margin-top: 0;
+}
+.dataDisplay__list__container__2 .dataDisplay__list__table__row > *:nth-of-type(2) {
+    float: right;
+    cursor: pointer;
+    color: #660066;
+}
+
+
+/** TODO make these variable based on view width */
+.dataDisplay__list__container__5 .dataDisplay__list__table__row svg:first-of-type {
+    width: 25%;
+}
+.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:first-of-type {
+    width: 25%;
+}
+.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:nth-of-type(2) {
+    width: 20%;
+}
+.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:nth-of-type(3) {
+    width: 20%;
+}
+.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:nth-of-type(4) {
+    width: 30%;
+}
+.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:nth-of-type(5) {
+    width: 5%;
+    cursor: pointer;
+    color: #660066;
+}
+
+.dataDisplay__list__header {
+    margin-left: 1rem;
+}
+.dataDisplay__list__header h5 {
+    display: inline-block;
+    padding: 1rem 0;
+}
+.dataDisplay__list__item {
+    text-align: left;
+    list-style: none;
+    padding: .5rem;
+    margin: .5rem;
+    border: 1px solid #660066;
+    border-radius: 20%;
+    font-weight: bold;
+}
+.dataDisplay__list__item div {
+    display: inline-flex;
+    text-align: left;
+}
+
+.expandedListDisplay {
+    border: 1px solid #660066;
+    border-top: none;
+    padding: 1rem 3rem;
+    margin: -1rem .5rem 0;
+}
+
+.expandedListContent {
+    max-width: 40rem;
+    margin: 1rem auto 0;
+}
+
+.expandedListContent *:last-child {
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+
+
+.dataDisplay__docLink {
+    float: right;
+    text-decoration: none;
+    color: white;
+    background-color: #1c1d1e;
+    cursor: pointer;
+    border-radius: 20%;
+    margin: -1.5rem 0rem;
+}
+
+.dataDisplay__docLink * {
+    margin: .2rem;
+}
+
+.dataDisplay__filter__container {
+    display: inline-flex;
+    background: darkgrey;
+    width: 100%;
+}
+.dataDisplay__filter__container > div {
+    margin: 1rem;
+}
+.dataDisplay__filter__container > div > h4,h5,h6 {
+    margin: 0;
+}
+
+.dataDisplay__filter__name__input {
+    height: 3rem;
+    padding: 0 1rem;
+    font-size: 1.5rem;
+    margin-top: .5rem;
+}
+
+.dataDisplay__filter__button {
+    background: #660066;;
+    color: white;
+    cursor: pointer;
+    width: 8rem;
+    text-align: center;
+    border-radius: 20%;
+    padding: 1rem;
+}
+
+.dataDisplay__filter__button * {
+    margin: 0;
+}
+
+.resetFilters__button {
+    padding: 1rem 0 0 1.5rem;
+    color: #660066;
+    cursor: pointer;
+}
+
+.sortIcon {
+    max-width: 2rem;
+    cursor: pointer;
+}
+
+.checkmark__container {
+    display: inline-flex;
+}
+
+.checkmark__container > div {
+    margin-right: 1rem;
+}
+
+.dataDisplay__filter__checkBox {
+    margin: auto;
+}
