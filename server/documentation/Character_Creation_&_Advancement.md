@@ -16,7 +16,7 @@ One at a time select and apply three backgrounds to your character to represent 
 
 ## Beyond Starting Character Level
 
-Character's gain new and better skills, traits, even attributes as they progress through a campaign. At various milestones of play characters should gain levels, granting them additional traits; depending on the speed your game is looking to go a character may get one or more levels as often as every session or as rarely as at the end of each major chapter. Each time a character gains a level they gain one new trait. Each time a character gains a new trait they may also choose an old trait to reassign, losing the previous benefit and gaining a new one; they may not reassign a trait that is a requirement for another trait they still possess however.
+Character's gain new and better skills, traits, even attributes as they progress through a campaign. At various milestones of play characters should gain levels, granting them additional traits; depending on the speed your game is looking to go a character may get one or more levels as often as every session or as rarely as at the end of each major chapter. Each time a character gains a level they gain one new trait. Each time a character gains a new trait they may also choose an old trait to reassign, losing the previous benefit and gaining a new one; one may not reassign a trait that is a requirement for another trait they still possess.
 
 #### Training Time
 
