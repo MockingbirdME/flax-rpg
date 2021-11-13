@@ -19,7 +19,7 @@ const combatActionsData = {
     displayName: "Sprint",
     type: "Movement",
     actionPointCost: 3,
-    staminaCost: 3,
+    staminaCost: 2,
     description:
       "Move up to the three times the character's speed in hexes then make a *sprint* skill check and move up to one additional hex for every point by which the skill check increased their movement, this movement provokes free attacks when the character moves into or out of of a threatened hex."
   },
@@ -27,7 +27,7 @@ const combatActionsData = {
     displayName: "Climb",
     type: "Movement",
     actionPointCost: 1,
-    staminaCost: 0,
+    staminaCost: 1,
     description: ""
   },
   Jump: {
@@ -41,7 +41,7 @@ const combatActionsData = {
     displayName: "Swim",
     type: "Movement",
     actionPointCost: 1,
-    staminaCost: 0,
+    staminaCost: 1,
     description: ""
   },
   basicAttack: {
@@ -58,7 +58,7 @@ const combatActionsData = {
     actionPointCost: 1,
     staminaCost: 2,
     description:
-      "Make an attack with a readied melee weapon with the bash keyword. The character makes a *melee attack skill check*. The skill check gains a penalty die if the character does not have at least one rank in the *bash secondary skill (melee combat)*. If the attack hits the target suffers its damage, converted to concussive it if would have been otherwise, and the target is pushed back X hexes, where X is equal to the attacker's rank in the *bash secondary skill (melee combat)* hexes. Additional successes may each be spent to knock the target back an additional hex. The total distance the target is knocked back is reduced by the sum of the target's *size*, if positive, and *body* stat. If the target was knocked back at least one plus their reflexes stat hexes they are rendered prone at the end of the knock back movement."
+      "Make an attack with a readied melee weapon with the bash keyword. The character makes a *melee attack skill check*. The skill check gains a penalty die if the character does not have at least one rank in the *bash secondary skill (melee combat)*. If the attack hits the target suffers its damage, converted to concussive it if would have been otherwise, and the target is pushed back X hexes, where X is equal to the attacker's rank in the *bash secondary skill (melee combat)* hexes. Additional successes each increase this knock back distance by one hex. The total distance the target is knocked back is reduced by the sum of the target's *size*, if positive, and *body* stat. If the target was knocked back at least one plus their reflexes stat hexes they are rendered prone at the end of the knock back movement."
   },
   bullRush: {
     displayName: "Bull Rush",
@@ -66,7 +66,7 @@ const combatActionsData = {
     actionPointCost: 1,
     staminaCost: 2,
     description:
-      "Make a brawling attack or attack with an equipped shield attempting to push the target back. The character makes a *melee attack skill check* and applies the results. The skill check uses *body* instead of *reflexes* as the primary attribute, gains one penalty die if the character does not have at least one rank in the *bull rush secondary skill (melee combat)* and the target's *melee defense bonus* does not benefit from any shield(s) they may be wielding. If the attack hits the target is pushed back X hexes, where X is equal to the attacker's rank in the *bull rush secondary skill (melee combat)* hexes. Additional successes may only be spent to knock the target back an additional hex unless the movement has caused the target to hit a solid surface, such as a wall, in which case additional successes can be used to increase the attack's damage by one. The total distance the target is knocked back is reduced by the sum of the target's *size*, if positive, and *body* stat. If the target was knocked back at least one plus their reflexes stat hexes they are rendered prone at the end of the knock back movement. The attacker travels with the target as they are knocked back and may, if they choose, end their movement up to their body stat hexes before the target does."
+      "Make a brawling attack or attack with an equipped shield attempting to push the target back. The character makes a *melee attack skill check* and applies the results. The skill check uses *body* instead of *reflexes* as the primary attribute, gains one penalty die if the character does not have at least one rank in the *bull rush secondary skill (melee combat)* and the target's *melee defense bonus* does not benefit from shield or parry bonuses. If the attack hits the target is pushed back X hexes, where X is equal to the attacker's rank in the *bull rush secondary skill (melee combat)* hexes. Additional successes increase this knock back distance by an additional hex unless the movement has caused the target to hit a solid surface, such as a wall, in which case additional successes increase the attack's damage by one. The total distance the target is knocked back is reduced by the sum of the target's *size*, if positive, and *body* stat. If the target was knocked back at least one plus their reflexes stat hexes they are rendered prone at the end of the knock back movement. The attacker travels with the target as they are knocked back and may, if they choose, end their movement up to their body stat hexes before the target does."
   },
   brawling: {
     displayName: "Brawling",
@@ -203,6 +203,14 @@ const combatActionsData = {
     staminaCost: 1,
     description: ""
   },
+  steadyOneself: {
+    displayName: "Steady Oneself",
+    type: "Defensive",
+    actionPointCost: 1,
+    staminaCost: 0,
+    description:
+      "The character takes stock of their surroundings and steadies their balance. They regain defense equal to the sum of their ranks in the *awareness secondary skill* and *balance secondary skill* (minimum 1)."
+  },
   defensiveStance: {
     displayName: "Defensive Stance",
     type: "Defensive",
@@ -233,9 +241,17 @@ const combatActionsData = {
     actionPointCost: 1,
     staminaCost: 0,
     description:
-      "The character does their best to catch their breath and reposition themselves. They regain 2 plus the sum  of their ranks in the *endurance primary skill* and thir rank in the *stamina secondary skill (endurance)* stamina."
+      "The character does their best to catch their breath and reposition themselves. They regain stamina equal to 2 plus their ranks in the *endurance secondary skill*."
   },
-  DelayTurn: {
+  focus: {
+    displayName: "Focus",
+    type: "Other",
+    actionPointCost: "1",
+    staminaCost: 0,
+    description:
+      "The character clears their mind and ignores all distractions, each skill roll they make this turn gains a focus bonus die to the check. When you take this action you may choose to spend one willpower to gain an additional focus bonus die to each skill check this round and may spend a max willpower to ignore status effects, such as fear and wounds, for remainder of the turn."
+  },
+  delayTurn: {
     displayName: "Delay Turn",
     type: "Other",
     actionPointCost: "All",
@@ -243,7 +259,7 @@ const combatActionsData = {
     description:
       "This action can only be taken if the character has taken no other actions this turn and costs all of their action points. The character may reset their initiative to any value 1-10, if there are already one or more characters acting at that initiative they may choose where in the turn order amongs those characters they will act."
   },
-  Prepare: {
+  prepare: {
     displayName: "Prepare",
     type: "Other",
     actionPointCost: 1,

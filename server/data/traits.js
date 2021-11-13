@@ -71,7 +71,7 @@ const traitsData = {
     Proficiency requirements and limits
     | Proficiency | Required Secondary Ranks | Max Secondary Rank |
     | --- | --- | --- |
-    | not proficient | N/A | 1 |
+    | untrained | N/A | 1 |
     | novice | 1 | 2 |
     | skilled | 3 | 3 |
     | expert | 7 | 4 |

@@ -2,11 +2,15 @@ When a character wishes to attempt an action where success is not certain and fa
 
 ## Making a Skill Check
 To perform a skill check requires a number of steps as follows:
-1. Determine the relevant attribute and skill, when there is no clear answer here the player and GM should try to figure out what to use together but the GM has final say.
+1. Determine the relevant attribute, skill, and secondary skill, when there is no clear answer here the player and GM should try to figure out what to use together with the GM having final say.
 2. Determine the difficulty of the skill check.
-3. Determine if the dice involved in this skill check are 0 indexed or 1 indexed. If a character is not proficient in the primary skill they use 0 indexed dice for this roll, otherwise they use one indexed dice; 0 indexed dice treat a result of '0' on each die as equal to zero, while one indexed dice treat it as equal to ten.
-4. Determine bonus and penalty dice - a character gains expertise bonus dice for each rank of proficiency beyond novice, one for skilled, two for expert, and 3 for master. Any given skill check may gain a variety of of bonus or penalty dice from status effects, situational advantages/disadvantages, or character abilities.
-5. Build your die pool. This always contains 2 standard dice, as well as all bonus or penalty dice added to the roll. Make sure you know which dice are standard, penalty, and each type of bonus you have in the roll.
+3. Build the die pool:
+  1. Start with two standard dice.
+  2. If the character has untrained level proficiency in the primary skill and has zero ranks in the secondary skill add an untrained penalty die.
+  3. If the character has skilled level proficiency in the primary skill add a skilled bonus die.
+  4. If the character has expert level proficiency in the primary skill add a skilled bonus die.
+  5. If the character has master level proficiency in the primary skill add a mastery bonus die.
+  6. Add any extra bonus or penalty dice the character gains as a result of conditions, circumstance, or action choices, make sure to keep track of which kind of dice each is.
 6. Roll all dice in your die pool.
 7. For each penalty die in the roll remove the highest remaining die result in your pool.
 8. For each bonus die in the roll remove the lowest remaining result in your pool.
@@ -15,7 +19,11 @@ To perform a skill check requires a number of steps as follows:
 11. Compare the roll total to the difficulty of the skill check and determine results.
 
 ### Bonus and Penalty Die types and effects
-
+* penalty die - subtract one from the skill check total.
+* skilled die - add one to the skill check total.
+* mastery die - add two to the skill check total.
+* reckless die - lose one point of defense, if both dice are reckless lose one point of max defense instead.
+* focus die - lose one point of willpower, if both dice are focus dice lose one point of max willpower instead.
 
 ## Difficulties:
 * 6-7 - very easy

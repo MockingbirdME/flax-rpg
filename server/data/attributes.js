@@ -86,7 +86,7 @@ const resourceAttributes = {
     description:
       "The amount of defense a character has.",
     uses:
-      "Attacks made against a character are compared to the character's current defense. Defense can be spent to reduce the results of a skill check being compared to the character's defense by 5, the skill check is compared to the defense value before this expenditure, no more than one defense can be spent in this way for a given skill check.",
+      "Attacks made against a character are compared to the character's current defense.",
     baseValue: "8 + perception + mind + reflexes + ranks in the personal defense skill."
   },
   luck: {
@@ -101,15 +101,15 @@ const resourceAttributes = {
     displayName: "Stamina",
     description:
       "The total amount of stamina a character has.",
-    uses: "Stamina is used for fuel various actions a character may take as they push themselves to their limits with acts of arcane or physical prowes. Max stamina can also be spent to reduce damage the character suffers potentially reducing or preventing wounds.",
+    uses: "Stamina is used for fuel various actions a character may take as they push themselves to their limits with acts of arcane or physical prowes. Max stamina is also reduced when the character suffers physical damage or is otherwise drained of energy.",
     baseValue:
-      "3 + 2 * body, minimum 1."
+      "3 + twice body (if positive) or minus body if negative (minimum 1)."
   },
   willpower: {
     displayName: "Willpower",
     description:
       "The total amount of willpower a character has.",
-    uses: "Effects that affect a characters mind can only be applied if the target's willpower is low enough, other effects ware at the targets mind reducing their willpower. Additionally, willpower can be spent to increase a skill check result by the character's rank in the primary skill, limit once per skill check. Max willpower can be spent to ignore many status effects, such as fear and wounds, for one turn.",
+    uses: "Effects that affect a characters mind can only be applied if the target's willpower is low enough, other effects ware at the targets mind reducing their willpower. Willpower can also be spent by a character when they take the focus action.",
     baseValue:
       "3 + mind, minimum 1."
   }
