@@ -1,23 +1,22 @@
-import React, {Component} from 'react';
+import React, { useContext } from "react";
 import DataDisplay from './dataDisplay.js';
-import { observer, inject } from "mobx-react";
+import DataContext from "../contexts/data";
 
-const Traits = inject("rootStore")(observer (
-class Traits extends Component {
-    render() {
-        let data = this.props.rootStore.traitsStore.traits;
-        return (
-            <DataDisplay
-                data={data}
-                namePlural="Traits"
-                nameSingular="Trait"
-                rulesLink="/rules/traits"
-                sortableFields={[{name: "Type", sort: "type"}, {name: "Keywords", sort: "keywords"}, {name: "Requirements", sort: "requirementsDescription"}]}
-                filterableFields={[{name: "Type", sort: "type"}, {name: "Keywords", sort: "keywords"}]}
-            />
-        )
-    }
-}
-))
+
+const Traits = () => {
+  const context = useContext(DataContext);
+  const {traits} = context;
+
+  return (
+    <DataDisplay
+      data={traits}
+      namePlural="Traits"
+      nameSingular="Trait"
+      rulesLink="/rules/traits"
+      sortableFields={[{name: "Type", sort: "type"}, {name: "Keywords", sort: "keywords"}, {name: "Requirements", sort: "requirementsDescription"}]}
+      filterableFields={[{name: "Type", sort: "type"}, {name: "Keywords", sort: "keywords"}]}
+    />
+  );
+};
 
 export default Traits;

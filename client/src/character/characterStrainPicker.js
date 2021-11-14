@@ -2,18 +2,18 @@ import React, { useContext, useState } from "react";
 import {useParams} from 'react-router-dom';
 import "./character.css";
 import CharacterContext from "../contexts/character";
-import StrainContext from "../contexts/strain";
+import DataContext from "../contexts/data";
 
 const CharacterStrainPicker = props => {
   const [strain, setStrain] = useState("");
   const charContext = useContext(CharacterContext);
-  const strainContext = useContext(StrainContext);
-  const {strains} = strainContext;
+  const dataContext = useContext(DataContext);
+  const {strains} = dataContext;
   const { charId } = useParams();
-  
-  
+
+
   if (!charContext.characters[charId]) return <div></div>;
-    
+
   const {strain: {name: strainName} = {}} = charContext.characters[charId];
   if (!strain && strainName && strainName !== "unknown") setStrain(strainName);
 
@@ -21,8 +21,8 @@ const CharacterStrainPicker = props => {
     setStrain(value);
     charContext.setCharacterStrain(charId, value, strains[value].options);
   };
-  
-  const options = Object.keys(strains).length 
+
+  const options = Object.keys(strains).length
     ? [<option disabled hidden style={{display: "none"}} value="" key="default">-- select a strain --</option>].concat(Object.keys(strains).map(strainId => (
       <option key={strainId} value={strainId}>
         {strains[strainId].displayName}

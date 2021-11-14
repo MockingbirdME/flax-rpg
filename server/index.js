@@ -37,7 +37,7 @@ app.get('/api-docs/swagger.json', (req, res) => {
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, swaggerOpts));
 
 // Connect the API
-// app.use('/api/v1', require('./api/v1/index'));
+app.use('/api/v1', require('./api/v1/index'));
 app.use('/api', (req, res, next) => next(createError(404, "You must specify a valid API version. Ex: `/api/v1`.")));
 
 

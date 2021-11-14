@@ -2,33 +2,33 @@ import React, { useContext } from "react";
 import {useParams} from 'react-router-dom';
 import "./character.css";
 import CharacterContext from "../contexts/character";
-import SkillContext from "../contexts/skill";
+import DataContext from "../contexts/data";
 
 
 const OptionSelector = props => {
   const charContext = useContext(CharacterContext);
-  const skillContext = useContext(SkillContext);
-  const {skills} = skillContext;
+  const dataContext = useContext(DataContext);
+  const {skills} = dataContext;
   const { charId } = useParams();
-  
+
   if (
     !charContext.characters[charId]
     || !Object.keys(skills).length
   ) return <div></div>;
-  
+
   const changeSubOption = (value, optionId) => {
     const {id, options, selectedOptions = {}} = props.currentValue;
-    
+
     options.forEach(option => {
       if (option.parentId === optionId) delete selectedOptions[option.id];
     });
-    
+
     props.onChange(id, {...selectedOptions, [optionId]: value});
   };
 
   const selectableOptionKeys = props.options || [];
 
-  const selectableOptions = selectableOptionKeys.length 
+  const selectableOptions = selectableOptionKeys.length
     ? [<option disabled hidden style={{display: "none"}} value="" key="default">-- {props.defaultSelectionType ? `select a ${props.defaultSelectionType.toLowerCase()}` : "select one"} --</option>].concat(selectableOptionKeys
       .map((key, index) => {
         if (props.keyType === 'trait') {
@@ -38,7 +38,7 @@ const OptionSelector = props => {
               {`${key.displayName}${keywords ? ` - ${keywords}` : ""}`}
             </option>);
         }
-          
+
         if (props.keyType === 'skill') return (
           <option key={index} value={key}>
             {skills[key].displayName}
@@ -48,23 +48,23 @@ const OptionSelector = props => {
           <option key={index} value={key}>
             {skills[props.parentValue].secondarySkills[key].displayName}
           </option>);
-          
+
         if (props.keyType === 'attribute') return (
           <option key={index} value={key}>
             {key.charAt(0).toUpperCase() + key.slice(1)}
           </option>);
-              
+
         return '';
       }))
     : [];
 
   const subOptions = props.currentValue.options || [];
-  
-  const subOptionsDisplay = subOptions.map((option, index) => {  
+
+  const subOptionsDisplay = subOptions.map((option, index) => {
     const {options} = option;
 
     const optionsValue = (props.currentValue.selectedOptions && props.currentValue.selectedOptions[option.id]) || {};
-    
+
     const newSelectedValue = typeof optionsValue === "string"
       ? {id: optionsValue}
       : optionsValue;
@@ -72,30 +72,30 @@ const OptionSelector = props => {
     const parentValue = option.parentValue || null;
 
     return (
-      <OptionSelector 
+      <OptionSelector
         key={option.id}
         id={option.id}
         defaultSelectionType={option.displayName}
         isOption={true}
         options={options}
         parentValue={parentValue}
-        selectedOptions={props.currentValue.selectedOptions} 
+        selectedOptions={props.currentValue.selectedOptions}
         keyType={option.type || "string"}
-        onChange={changeSubOption} 
+        onChange={changeSubOption}
         currentValue={newSelectedValue} />
     );
   });
-  
+
   const selectedDescription = props.currentValue && props.currentValue.description
     ? <div className="character_option_selector_selected_description" dangerouslySetInnerHTML={{__html: props.currentValue.description}} />
-    
+
     : "";
 
   return (
     <div >
       <div className="character_option_selector">
         {props.isOption ? <h4 style={{margin: "0"}}>{props.defaultSelectionType}</h4> : ""}
-        {selectableOptions.length > 1 
+        {selectableOptions.length > 1
           ? <select
             className="character_option_selector_selectable"
             style={{width: props.isOption ? "20rem" : "100%"}}
