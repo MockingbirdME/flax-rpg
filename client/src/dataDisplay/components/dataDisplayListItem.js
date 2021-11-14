@@ -19,11 +19,11 @@ const DataDisplayListItem = (props) => {
     const displayString = (
       Array.isArray(props.data[field.sort])
         ? <ul style={{padding: "0"}}>{props.data[field.sort].map(item => <li key={item}>{item}</li>)}</ul>
-        : props.data[field.sort]
+        : <p>{props.data[field.sort]}</p>
     );
 
     return (
-      <div key={field.sort} ><span>{displayString}</span></div>
+      <div key={field.sort} style={{justifyContent: "space-around"}}>{displayString}</div>
     );
   });
   display.unshift(<div key="displayName">{props.data.displayName}</div>);

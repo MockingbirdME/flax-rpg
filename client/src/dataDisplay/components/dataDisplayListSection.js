@@ -67,6 +67,8 @@ const DataDisplayListSection = props => {
 
   const renderedDisplay = () => {
     const className = props.fields.length > 2 ? "hidden" : "placeholderText";
+    console.log(displayDocumentation);
+    console.log(rawDocs[displayDocumentation]);
     if (displayDocumentation) return rawDocs[displayDocumentation];
     return `<p class="${className}">Please select an option from the left to display.</p>`;
   };
@@ -89,7 +91,7 @@ const DataDisplayListSection = props => {
         fields={props.fields}
         expandInPlace={props.fields.length > 1}
         renderSelected={ev => renderSelected(ev)}
-        renderedContent={renderedDisplay()}
+        renderedContent={props.contentRenderer ? props.contentRenderer(dataKey) : renderedDisplay()}
       />
     ));
     if (listHtml.length) return listHtml;

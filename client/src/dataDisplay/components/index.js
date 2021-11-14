@@ -38,6 +38,7 @@ const DataDisplay = (props) => {
       filterName={filterName}
       filterFields={filterFields}
       documentationExtension={props.documentationExtension}
+      contentRenderer={props.contentRenderer}
     />
   );
 

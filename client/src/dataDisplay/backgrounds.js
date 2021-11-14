@@ -6,6 +6,7 @@ const Backgrounds = () => {
   const context = useContext(DataContext);
   const {backgrounds} = context;
   console.log(backgrounds);
+
   return (
     <DataDisplay
       data={backgrounds}
@@ -15,6 +16,7 @@ const Backgrounds = () => {
       sortableFields={[
         {name: "Focused Skills", sort: "focusedSkills", noSorting: true},
         {name: "Related Skills", sort: "relatedSkills", noSorting: true},
+        {name: "Optional Traits", sort: "traitsOptional", noSorting: true},
         {name: "Stamina", sort: "stamina"},
         {name: "Willpower", sort: "willpower"},
         {name: "Luck", sort: "luck"}
