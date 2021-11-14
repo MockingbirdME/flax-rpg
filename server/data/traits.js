@@ -385,14 +385,14 @@ const traitsData = {
     displayName: "Reckless Attacker",
     type: "Combat",
     requirements: [],
-    requirementsDescription: "1/3/7/15 total ranks in secondary skill associated with melee combat.",
+    requirementsDescription: "1/3/7/15 total ranks in secondary skills associated with melee combat.",
     keywords: ["Simple"],
     description: `
     Characters can take this trait multiple times gaining cumulative benefits for each time they've taken this trait.
-        1 - The character may choose to spend one stamina and one defense before making a basic or brawling attack on their turn, if they do they gain a bonus die to that melee attack skill check.
+        1 - The character may choose to spend one stamina or one defense before making a basic or brawling attack on their turn, if they do they gain a reckless bonus die to that melee attack skill check.
         2 - The character may trigger this ability on any melee attack action, not just basic and brawing attacks.
-        3 - The character may spend an additional stamina and defense when they use this ability to gain a second bonus die on this skill check.
-        4 - The character may spend an additional stamina and defense when they use this ability to gain the bonus dice on all eligible melee attacks they make this turn.
+        3 - The character may spend an additional stamina or defense when they use this ability to gain a second reckless bonus die on this skill check.
+        4 - When the character uses reckless attack they gain the bonus die/dice to all eligible melee attacks they make this turn, not just the next one.
     `,
     isCharacterEligible: character => {
       // TODO make this work

@@ -7,9 +7,7 @@ To perform a skill check requires a number of steps as follows:
 3. Build the die pool:
   1. Start with two standard dice.
   2. If the character has untrained level proficiency in the primary skill and has zero ranks in the secondary skill add an untrained penalty die.
-  3. If the character has skilled level proficiency in the primary skill add a skilled bonus die.
-  4. If the character has expert level proficiency in the primary skill add a skilled bonus die.
-  5. If the character has master level proficiency in the primary skill add a mastery bonus die.
+  3. If the character has skilled level proficiency or higher in the primary skill add a skilled bonus die.
   6. Add any extra bonus or penalty dice the character gains as a result of conditions, circumstance, or action choices, make sure to keep track of which kind of dice each is.
 6. Roll all dice in your die pool.
 7. For each penalty die in the roll remove the highest remaining die result in your pool.
@@ -20,8 +18,7 @@ To perform a skill check requires a number of steps as follows:
 
 ### Bonus and Penalty Die types and effects
 * penalty die - subtract one from the skill check total.
-* skilled die - add one to the skill check total.
-* mastery die - add two to the skill check total.
+* skilled die - add one to the skill check total if your skill level in the primary skill is expert level, increase this bonus to 2 if you have mastery level proficiency.
 * reckless die - lose one point of defense, if both dice are reckless lose one point of max defense instead.
 * focus die - lose one point of willpower, if both dice are focus dice lose one point of max willpower instead.
 
