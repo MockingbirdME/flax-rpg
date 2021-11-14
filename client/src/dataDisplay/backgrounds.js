@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import DataDisplay from './dataDisplay.js';
+import DataDisplay from './components';
 import DataContext from "../contexts/data";
 
 const Backgrounds = () => {
