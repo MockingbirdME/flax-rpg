@@ -7,6 +7,7 @@ export default DataContext;
 export const DataContextProvider = props => {
   const [combatActions, setCombatActions] = useState({});
   const [backgrounds, setBackgrounds] = useState({});
+  const [skillChecks, setSkillChecks] = useState({});
   const [skills, setSkills] = useState({});
   const [strains, setStrains] = useState({});
   const [traits, setTraits] = useState({});
@@ -31,6 +32,11 @@ export const DataContextProvider = props => {
     setCombatActions(skills);
   };
 
+  const loadSkillChecks = async () => {
+    const skillChecks = await loadData('SkillChecks');
+    setSkillChecks(skillChecks);
+  };
+
   const loadSkills = async () => {
     const skills = await loadData('Skills');
     setSkills(skills);
@@ -49,6 +55,7 @@ export const DataContextProvider = props => {
   useEffect(() => {
     loadBackgrounds();
     loadCombatActions();
+    loadSkillChecks();
     loadSkills();
     loadStrains();
     loadTraits();
@@ -56,6 +63,6 @@ export const DataContextProvider = props => {
 
 
   return <DataContext.Provider value={{
-  backgrounds, combatActions, skills, strains, traits
+  backgrounds, combatActions, skillChecks, skills, strains, traits
   }}>{props.children}</DataContext.Provider>;
 };

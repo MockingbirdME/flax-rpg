@@ -176,7 +176,7 @@ const backgrounds = {
     stamina: 1,
     willpower: 2,
     startingWealth: 0,
-    focusedSkills: ["Magical Aptitude"],
+    focusedSkills: ["magical aptitude"],
     relatedSkills: ["alchemy", "discipline", "knowledge (academics)", "knowledge (lore)", "physical conditioning"],
     traitsOptional: ["dependent mage", "learned mage", "natural mage"]
   },

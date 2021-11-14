@@ -4,11 +4,11 @@ import DataContext from "../contexts/data";
 
 const SkillChecks = () => {
   const context = useContext(DataContext);
-  const {skills} = context;
+  const {skillChecks} = context;
 
   return (
     <DataDisplay
-      data={skills}
+      data={skillChecks}
       namePlural="Skill Checks"
       nameSingular="Skill Check"
       rulesLink="/rules/skill checks"

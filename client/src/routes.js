@@ -13,28 +13,31 @@ import Traits from "./dataDisplay/traits.js";
 
 import {CharacterContextProvider} from "./contexts/character";
 import {DataContextProvider} from "./contexts/data";
+import {RulesContextProvider} from "./contexts/rules";
 
 class Routes extends Component {
   render() {
     return (
       <CharacterContextProvider>
         <DataContextProvider>
+          <RulesContextProvider>
 
-          <div id="route-controller">
-            <Switch>
-              <Route path="/rules" component={CoreRules} />
-              <Route path="/backgrounds" component={Backgrounds} />
-              <Route path="/skill checks" component={SkillChecks} />
-              <Route path="/combat actions" component={CombatActions} />
-              <Route path="/strains" component={Strains} />
-              <Route path="/traits" component={Traits} />
-              <Route path="/character/sheet/:charId?" component={CharacterSheet} />
-              <Route path="/character/createoredit/:charId?"
-                component={CreateOrEditChar} />
-              <Route exact path="/" component={Home} />
-            </Switch>
-          </div>
+            <div id="route-controller">
+              <Switch>
+                <Route path="/rules" component={CoreRules} />
+                <Route path="/backgrounds" component={Backgrounds} />
+                <Route path="/skill checks" component={SkillChecks} />
+                <Route path="/combat actions" component={CombatActions} />
+                <Route path="/strains" component={Strains} />
+                <Route path="/traits" component={Traits} />
+                <Route path="/character/sheet/:charId?" component={CharacterSheet} />
+                <Route path="/character/createoredit/:charId?"
+                  component={CreateOrEditChar} />
+                <Route exact path="/" component={Home} />
+              </Switch>
+            </div>
 
+          </RulesContextProvider>
         </DataContextProvider>
       </CharacterContextProvider>
     );

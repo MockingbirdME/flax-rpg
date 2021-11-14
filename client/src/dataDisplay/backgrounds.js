@@ -12,8 +12,14 @@ const Backgrounds = () => {
       namePlural="Backgrounds"
       nameSingular="Background"
       rulesLink="/rules/background"
-      sortableFields={[{name: "Stamina", sort: "stamina"}, {name: "Willpower", sort: "willpower"}, {name: "Luck", sort: "luck"}]}
-      filterableFields={[{name: "Action Type", sort: "type"}]}
+      sortableFields={[
+        {name: "Focused Skills", sort: "focusedSkills", noSorting: true},
+        {name: "Related Skills", sort: "relatedSkills", noSorting: true},
+        {name: "Stamina", sort: "stamina"},
+        {name: "Willpower", sort: "willpower"},
+        {name: "Luck", sort: "luck"}
+      ]}
+      filterableFields={[{name: "Focused Skills", sort: "focusedSkills"}]}
     />
   );
 };

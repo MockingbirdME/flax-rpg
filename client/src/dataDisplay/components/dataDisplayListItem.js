@@ -1,47 +1,47 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-class DataDisplayListItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            expanded: false
-         };
-    }
+const DataDisplayListItem = (props) => {
+  const [expanded, setExpanded] = useState(false);
 
-    toggleExpanded = () => {
-        if (this.props.expandInPlace) this.setState({expanded: !this.state.expanded});
-        this.props.renderSelected(this.props.name);
-    }
+  const toggleExpanded = () => {
+    if (props.expandInPlace) setExpanded(!expanded);
+    props.renderSelected(props.name);
+  };
 
-    render() {
-        let expandedClass = this.state.expanded ? "expandedListDisplay" : "hidden";
-        let plusMinus = this.state.expanded ? (faMinus) : (faPlus);
-        let expandedContent = this.props.renderedContent ? this.props.renderedContent : `<p>${this.props.data.description}</p>` || "";
-        let display = this.props.fields.map(field => {
-            let displayString = this.props.data[field.sort];
-            if (Array.isArray(displayString)) displayString = displayString.join(" or ");
-            return (
-                <div key={field.sort} >{displayString}</div>
-            )
-        })
-        display.unshift(<div key="displayName">{this.props.data.displayName}</div>)
-        return (
-            <div>
-                <li
-                    className="dataDisplay__list__table__row dataDisplay__list__item">
-                    {display}
-                    <div onClick={ev => this.toggleExpanded()}><FontAwesomeIcon icon={plusMinus} /></div>
-                </li>
-                <div className={expandedClass}
-                >
-                    <div className="expandedListContent" dangerouslySetInnerHTML={{__html: expandedContent}} />
-                </div>
-            </div>
-        )
-    }
-}
+  const expandedClass = expanded ? "expandedListDisplay" : "hidden";
+  const plusMinus = expanded ? (faMinus) : (faPlus);
+
+  const expandedContent = props.renderedContent ? props.renderedContent : `<p>${props.data.description}</p>` || "";
+
+  const display = props.fields.map(field => {
+    const displayString = (
+      Array.isArray(props.data[field.sort])
+        ? <ul style={{padding: "0"}}>{props.data[field.sort].map(item => <li key={item}>{item}</li>)}</ul>
+        : props.data[field.sort]
+    );
+
+    return (
+      <div key={field.sort} ><span>{displayString}</span></div>
+    );
+  });
+  display.unshift(<div key="displayName">{props.data.displayName}</div>);
+
+  return (
+    <div>
+      <li
+        className="dataDisplay__list__table__row dataDisplay__list__item">
+        {display}
+        <div onClick={() => toggleExpanded()}><FontAwesomeIcon icon={plusMinus} /></div>
+      </li>
+      <div className={expandedClass}
+      >
+        <div className="expandedListContent" dangerouslySetInnerHTML={{__html: expandedContent}} />
+      </div>
+    </div>
+  );
+};
+
 
 export default DataDisplayListItem;

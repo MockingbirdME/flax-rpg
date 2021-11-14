@@ -9,6 +9,13 @@ const DataDisplay = (props) => {
   const [filterName, setFilterName] = useState("");
   const [filterFields, setFilterFields] = useState({});
 
+  const titleDisplay = (
+    <DataDisplayTitleSection
+      name={props.namePlural}
+      rulesLink={props.rulesLink}
+    />
+  );
+
   const updateFilters = (data) => {
     if (typeof data === "string") setFilterName(data);
     else setFilterFields(data);
@@ -24,20 +31,21 @@ const DataDisplay = (props) => {
       updateFilters={ev => updateFilters(ev)}
     />;
 
+  const listDisplay = (
+    <DataDisplayListSection
+      data={props.data}
+      fields={props.sortableFields}
+      filterName={filterName}
+      filterFields={filterFields}
+      documentationExtension={props.documentationExtension}
+    />
+  );
+
   return (
     <div className="dataDisplay__container">
-      <DataDisplayTitleSection
-        name={props.namePlural}
-        rulesLink={props.rulesLink}
-      />
+      {titleDisplay}
       {filterDisplay}
-      <DataDisplayListSection
-        data={props.data}
-        fields={props.sortableFields}
-        filterName={filterName}
-        filterFields={filterFields}
-        documentationExtension={props.documentationExtension}
-      />
+      {listDisplay}
     </div>
   );
 

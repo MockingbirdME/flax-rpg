@@ -12,9 +12,15 @@ module.exports = {
     }
   },
 
-  extends: ["eslint:recommended"],
+  extends: ["eslint:recommended", "plugin:react/recommended"],
 
   rules: {
+
+    // //////// React Settings //////////
+    
+    'react/prop-types': ['off'],
+
+
     // //////// Possible Errors //////////
 
     "for-direction": 2, // Enforce “for” loop update clause moving the counter in the right direction
