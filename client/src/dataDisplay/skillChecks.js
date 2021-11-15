@@ -9,8 +9,7 @@ const SkillChecks = () => {
   return (
     <DataDisplay
       data={skillChecks}
-      namePlural="Skill Checks"
-      nameSingular="Skill Check"
+      name="Skill Check"
       rulesLink="/rules/skill checks"
       sortableFields={[{name: "Primary Attribute", sort: "primaryAttribute"}, {name: "Primary Skill", sort: "primarySkill"}, {name: "Relevant Secondary Skills", sort: "relevantSecondarySkills"}]}
       filterableFields={[{name: "Primary Attribute", sort: "primaryAttribute"}, {name: "Primary Skill", sort: "primarySkill"}]}

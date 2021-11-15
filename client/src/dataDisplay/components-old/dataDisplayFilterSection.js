@@ -74,7 +74,7 @@ class DataDisplayFilterSection extends Component {
                         className="dataDisplay__filter__name"
                         style={{width: `25%`}}
                         >
-                        <h5>{this.props.name} Name</h5>
+                        <h5>{this.props.nameSingular} Name</h5>
                         <input
                             className="dataDisplay__filter__name__input"
                             type={"text"}

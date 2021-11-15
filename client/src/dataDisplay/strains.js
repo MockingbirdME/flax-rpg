@@ -9,12 +9,9 @@ const Strains = () => {
   return (
     <DataDisplay
       data={strains}
-      namePlural="Strains"
-      nameSingular="Strain"
+      name="Strain"
       rulesLink="/rules/strains"
       sortableFields={[]}
-      filterableFields={[]}
-      hideFilter={true}
       documentationExtension="rules/strains/"
     />
   );

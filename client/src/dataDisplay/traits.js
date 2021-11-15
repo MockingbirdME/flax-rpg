@@ -10,11 +10,10 @@ const Traits = () => {
   return (
     <DataDisplay
       data={traits}
-      namePlural="Traits"
-      nameSingular="Trait"
+      name="Trait"
       rulesLink="/rules/traits"
-      sortableFields={[{name: "Type", sort: "type"}, {name: "Keywords", sort: "keywords"}, {name: "Requirements", sort: "requirementsDescription"}]}
-      filterableFields={[{name: "Type", sort: "type"}, {name: "Keywords", sort: "keywords"}]}
+      sortableFields={[{name: "Type", sort: "type"}]}
+      filterableFields={[{name: "Type", sort: "type"}]}
     />
   );
 };

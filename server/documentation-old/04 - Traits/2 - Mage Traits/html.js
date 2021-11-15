@@ -9,7 +9,6 @@ for (let key in data) {
 
     let reqs = trait.requirements && trait.requirements.length ? `<p><b>Requirements: </b>${trait.requirementsDescription}</p>` : "";
     let description = `<p>`;
-    trait.keywords.forEach(keyword => description += `<b><i>${keyword} </i></b>`);
     description += `${trait.description}</p>`;
 
     html += `

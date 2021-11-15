@@ -15,29 +15,35 @@ const DataDisplayListItem = (props) => {
 
   const expandedContent = props.renderedContent ? props.renderedContent : `<p>${props.data.description}</p>` || "";
 
-  const display = props.fields.map(field => {
-    const displayString = (
-      Array.isArray(props.data[field.sort])
-        ? <ul style={{padding: "0"}}>{props.data[field.sort].map(item => <li key={item}>{item}</li>)}</ul>
-        : <p>{props.data[field.sort]}</p>
-    );
+  const row = (
+    <li className="dataDisplay__list__row dataDisplay__list__item">
+      <h5 key="displayName" className="dataDisplay__list__row__name" >{props.data.displayName} </h5>
+      <div className="dataDisplay__list__row__fields">
+        { // TODO add filter to remove cutable fields on short screens
+          props.fields.map(field => {
+            const displayString = (
+              Array.isArray(props.data[field.sort])
+                ? <ul style={{padding: "0", minWidth: `${field.minWidthRem}rem`}}>{props.data[field.sort].map(item => <li key={item}>{item}</li>)}</ul>
+                : <p style={{minWidth: `${field.minWidthRem}rem`}} >{props.data[field.sort]}</p>
+            );
 
-    return (
-      <div key={field.sort} style={{justifyContent: "space-around"}}>{displayString}</div>
-    );
-  });
-  display.unshift(<div key="displayName">{props.data.displayName}</div>);
+            return (
+              <div key={field.sort} >{displayString}</div>
+            );
+          })
+        }
+      </div>
+      <div className="dataDisplay__list__row__expand_toggle" onClick={() => toggleExpanded()}><FontAwesomeIcon icon={plusMinus} /></div>
+    </li>
+  );
+// Old:         <div className="expandedListContent" dangerouslySetInnerHTML={{__html: expandedContent}} />
 
   return (
     <div>
-      <li
-        className="dataDisplay__list__table__row dataDisplay__list__item">
-        {display}
-        <div onClick={() => toggleExpanded()}><FontAwesomeIcon icon={plusMinus} /></div>
-      </li>
+      {row}
       <div className={expandedClass}
       >
-        <div className="expandedListContent" dangerouslySetInnerHTML={{__html: expandedContent}} />
+        {props.renderedContent}
       </div>
     </div>
   );

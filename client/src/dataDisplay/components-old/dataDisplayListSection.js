@@ -14,14 +14,23 @@ const DataDisplayListSection = props => {
 
   const sorter = (a, b) => {
     const {data} = props;
-    const fieldA = Array.isArray(data[a][sortBy]) ? data[a][sortBy].join(" ") : data[a][sortBy].toString();
-    const fieldB = Array.isArray(data[b][sortBy]) ? data[b][sortBy].join(" ") : data[b][sortBy].toString();
-
-    const stringA = fieldA ? fieldA.toLowerCase() : "";
-    const stringB = fieldB ? fieldB.toLowerCase() : "";
-
-    if (stringA < stringB) return sortAssending ? -1 : 1;
-    if (stringA > stringB) return sortAssending ? 1 : -1;
+    let fieldA = data[a][sortBy].toString();
+    if (Array.isArray(fieldA)) fieldA = fieldA.join(" ");
+    let fieldB = data[b][sortBy].toString();
+    if (Array.isArray(fieldB)) fieldB = fieldB.join(" ");
+    let stringA = fieldA ? fieldA.toLowerCase() : "";
+    let stringB = fieldB ? fieldB.toLowerCase() : "";
+    if (!sortAssending) {
+      const placeholderA = stringA;
+      stringA = stringB;
+      stringB = placeholderA;
+    }
+    if (stringA < stringB) {
+      return -1;
+    }
+    if (stringA > stringB) {
+      return 1;
+    }
     return 0;
   };
 
@@ -58,6 +67,8 @@ const DataDisplayListSection = props => {
 
   const renderedDisplay = () => {
     const className = props.fields.length > 2 ? "hidden" : "placeholderText";
+    console.log(displayDocumentation);
+    console.log(rawDocs[displayDocumentation]);
     if (displayDocumentation) return rawDocs[displayDocumentation];
     return `<p class="${className}">Please select an option from the left to display.</p>`;
   };
@@ -67,13 +78,12 @@ const DataDisplayListSection = props => {
     const {data} = props;
     if (!data) return "No Data Loaded.";
 
-    const keys = Object.keys(data);
+    let listHtml = Object.keys(data);
 
-    const filteredKeys = applyFilters(keys);
+    listHtml = applyFilters(listHtml);
 
-    filteredKeys.sort((a, b) => sorter(a, b));
-
-    const listHtml = filteredKeys.map(dataKey => (
+    listHtml.sort((a, b) => sorter(a, b));
+    listHtml = listHtml.map(dataKey => (
       <DataDisplayListItem
         key={dataKey}
         name={dataKey}
@@ -88,20 +98,15 @@ const DataDisplayListSection = props => {
     return (<p>Oh no! It looks like there are no results that match your filter selections.</p>);
   };
 
-  const fields = props.fields
+  const fields = [{name: `Name`, sort: `displayName`}].
+    concat(props.fields)
     .map(field => (
-      <h5 key={field.name} style={{minWidth: `${field.minWidthRem}rem`}} >{field.name}{field.noSorting ? "" : <FontAwesomeIcon icon={faSort} className="sortIcon" onClick={() => updateSort(field.sort)}/>}</h5>
+      <h5 key={field.name}>{field.name}{field.noSorting ? "" : <FontAwesomeIcon icon={faSort} className="sortIcon" onClick={() => updateSort(field.sort)}/>}</h5>
     ));
 
   const headerRow = (
-    <div className="dataDisplay__list__row">
-      <h5 key="name" className="dataDisplay__list__row__name" >
-        Name <FontAwesomeIcon icon={faSort} className="sortIcon" onClick={() => updateSort('displayName')}/>
-      </h5>
-      <div className="dataDisplay__list__row__fields">
-        {fields}
-      </div>
-      <span className="dataDisplay__list__row__expand_toggle" />
+    <div className="dataDisplay__list__table__row dataDisplay__list__header">
+      {fields}
     </div>
   );
 

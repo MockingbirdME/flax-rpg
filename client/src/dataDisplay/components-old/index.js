@@ -11,7 +11,7 @@ const DataDisplay = (props) => {
 
   const titleDisplay = (
     <DataDisplayTitleSection
-      name={props.namePlural || `${props.name}s`}
+      name={props.namePlural}
       rulesLink={props.rulesLink}
     />
   );
@@ -21,14 +21,15 @@ const DataDisplay = (props) => {
     else setFilterFields(data);
   };
 
-  const filterDisplay = props.filterableFields
-    ? <DataDisplayFilterSection
-      name={props.name}
+  const filterDisplay = props.hideFilter
+    ? ""
+    : <DataDisplayFilterSection
+      nameSingular={props.nameSingular}
+      namePlural={props.namePlural}
       filterableFields={props.filterableFields}
       data={props.data}
       updateFilters={ev => updateFilters(ev)}
-    />
-    : "";
+    />;
 
   const listDisplay = (
     <DataDisplayListSection
