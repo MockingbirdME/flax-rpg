@@ -11,7 +11,11 @@ const SkillChecks = () => {
       data={skillChecks}
       name="Skill Check"
       rulesLink="/rules/skill checks"
-      sortableFields={[{name: "Primary Attribute", sort: "primaryAttribute"}, {name: "Primary Skill", sort: "primarySkill"}, {name: "Relevant Secondary Skills", sort: "relevantSecondarySkills"}]}
+      sortableFields={[
+        {name: "Primary Attribute", sort: "primaryAttribute", minWidthRem: 11},
+        {name: "Primary Skill", sort: "primarySkill", minWidthRem: 11},
+        {name: "Relevant Secondary Skills", sort: "relevantSecondarySkills", minWidthRem: 13}
+      ]}
       filterableFields={[{name: "Primary Attribute", sort: "primaryAttribute"}, {name: "Primary Skill", sort: "primarySkill"}]}
       documentationExtension="rules/skill checks/"
     />

@@ -11,7 +11,6 @@ const Strains = () => {
       data={strains}
       name="Strain"
       rulesLink="/rules/strains"
-      sortableFields={[]}
       documentationExtension="rules/strains/"
     />
   );

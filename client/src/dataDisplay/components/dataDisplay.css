@@ -22,83 +22,36 @@
 }
 
 
-.dataDisplay__list__container__2 .dataDisplay__list__content__container {
+.dataDisplay__list__container__side_by_side .dataDisplay__list__content__container {
     display: flex;
+    justify-content: space-between;
 }
-.dataDisplay__list__container__2 .dataDisplay__list__content__container > div:first-of-type {
+.dataDisplay__list__container__side_by_side .dataDisplay__list__content__container > div:first-of-type {
     min-width: 10rem;
     width: calc(40vw - 20rem);
 }
-.dataDisplay__list__container__2 .dataDisplay__list__content__container > div:nth-of-type(2) {
+.dataDisplay__list__container__side_by_side .dataDisplay__list__content__container > div:nth-of-type(2) {
     border: 1px solid;
-    width: calc(80% - 3rem);
-    max-width: 40rem;
+    flex-grow: 1;
+    max-width: calc(70%);
     padding: 1rem;
-    margin: -1rem auto;
 }
-.dataDisplay__list__container__2 .dataDisplay__list__content__container > div:nth-of-type(2) .placeholderText {
+.dataDisplay__list__container__side_by_side .dataDisplay__list__content__container > div:nth-of-type(2) .placeholderText {
     text-align: center;
     margin-top: 3rem;
 }
 
-.dataDisplay__list__container__2 .dataDisplay__list__content__container > div:nth-of-type(2) {
+.dataDisplay__list__container__side_by_side .dataDisplay__list__content__container > div:nth-of-type(2) {
     margin-top: 0;
 }
-.dataDisplay__list__container__2 .dataDisplay__list__table__row > *:nth-of-type(2) {
+.dataDisplay__list__container__side_by_side .dataDisplay__list__table__row > *:nth-of-type(2) {
     float: right;
     cursor: pointer;
     color: #660066;
 }
 
-
-/** TODO make these variable based on view width */
-.dataDisplay__list__container__5 .dataDisplay__list__table__row svg:first-of-type {
-    width: 25%;
-}
-.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:first-of-type {
-    width: 25%;
-}
-.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:nth-of-type(2) {
-    width: 20%;
-}
-.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:nth-of-type(3) {
-    width: 20%;
-}
-.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:nth-of-type(4) {
-    width: 30%;
-}
-.dataDisplay__list__container__5 .dataDisplay__list__table__row > *:nth-of-type(5) {
-    width: 5%;
-    cursor: pointer;
-    color: #660066;
-}
-
-/** TODO make these variable based on view width */
-.dataDisplay__list__container__8 .dataDisplay__list__table__row > *:first-of-type {
-    width: 20%;
-}
-.dataDisplay__list__container__8 .dataDisplay__list__table__row > *:nth-of-type(2) {
-    width: 17%;
-}
-.dataDisplay__list__container__8 .dataDisplay__list__table__row > *:nth-of-type(3) {
-    width: 17%;
-}
-.dataDisplay__list__container__8 .dataDisplay__list__table__row > *:nth-of-type(4) {
-    width: 17%;
-}
-.dataDisplay__list__container__8 .dataDisplay__list__table__row > *:nth-of-type(5) {
-    width: 8%;
-}
-.dataDisplay__list__container__8 .dataDisplay__list__table__row > *:nth-of-type(6) {
-    width: 8%;
-}
-.dataDisplay__list__container__8 .dataDisplay__list__table__row > *:nth-of-type(7) {
-    width: 8%;
-}
-.dataDisplay__list__container__8 .dataDisplay__list__table__row > *:nth-of-type(8) {
-    width: 5%;
-    cursor: pointer;
-    color: #660066;
+.dataDisplay__list__container__side_by_side .dataDisplay__list__row__name {
+  min-width: 8rem;
 }
 
 .dataDisplay__list__row {
@@ -107,13 +60,15 @@
 }
 
 .dataDisplay__list__row__name {
+
+    font-weight: bold;
     min-width: 15rem;
     text-align: center;
 }
 
 .dataDisplay__list__row__fields {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex-grow: 1;
 }
 
@@ -122,8 +77,7 @@
 }
 
 .dataDisplay__list__row__expand_toggle {
-    min-width: 5rem;
-    margin-left: 3rem;
+    min-width: 3rem;
 }
 
 .dataDisplay__list__header {
@@ -140,11 +94,11 @@
     margin: .5rem 0;
     border: 1px solid #660066;
     border-radius: 20%;
-    font-weight: bold;
 }
 .dataDisplay__list__item div {
     display: inline-flex;
     text-align: left;
+    align-items: center;
 }
 
 .expandedListDisplay {

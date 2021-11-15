@@ -57,7 +57,7 @@ const DataDisplayListSection = props => {
   };
 
   const renderedDisplay = () => {
-    const className = props.fields.length > 2 ? "hidden" : "placeholderText";
+    const className = props.fields && props.fields.length > 2 ? "hidden" : "placeholderText";
     if (displayDocumentation) return rawDocs[displayDocumentation];
     return `<p class="${className}">Please select an option from the left to display.</p>`;
   };
@@ -78,8 +78,8 @@ const DataDisplayListSection = props => {
         key={dataKey}
         name={dataKey}
         data={data[dataKey]}
-        fields={props.fields}
-        expandInPlace={props.fields.length > 1}
+        fields={props.fields || []}
+        expandInPlace={props.fields && props.fields.length > 1}
         renderSelected={ev => renderSelected(ev)}
         renderedContent={props.contentRenderer ? props.contentRenderer(dataKey) : renderedDisplay()}
       />
@@ -89,9 +89,9 @@ const DataDisplayListSection = props => {
   };
 
   const fields = props.fields
-    .map(field => (
+    ? props.fields.map(field => (
       <h5 key={field.name} style={{minWidth: `${field.minWidthRem}rem`}} >{field.name}{field.noSorting ? "" : <FontAwesomeIcon icon={faSort} className="sortIcon" onClick={() => updateSort(field.sort)}/>}</h5>
-    ));
+    )) : "";
 
   const headerRow = (
     <div className="dataDisplay__list__row">
@@ -105,7 +105,7 @@ const DataDisplayListSection = props => {
     </div>
   );
 
-  const displayClass = `dataDisplay__list__container dataDisplay__list__container__${props.fields.length + 2}`;
+  const displayClass = `dataDisplay__list__container ${!props.fields ? 'dataDisplay__list__container__side_by_side' : ''}`;
 
   return (
     <div className={displayClass}>

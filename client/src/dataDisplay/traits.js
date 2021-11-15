@@ -12,7 +12,7 @@ const Traits = () => {
       data={traits}
       name="Trait"
       rulesLink="/rules/traits"
-      sortableFields={[{name: "Type", sort: "type"}]}
+      sortableFields={[{name: "Type", sort: "type", minWidthRem: 11}]}
       filterableFields={[{name: "Type", sort: "type"}]}
     />
   );

@@ -8,9 +8,13 @@ const CombatActions = () => {
   return (
     <DataDisplay
       data={combatActions}
-      name="Combat Actions"
+      name="Combat Action"
       rulesLink="/rules/combat"
-      sortableFields={[{name: "Action Type", sort: "type"}, {name: "Action Point Cost", sort: "actionPointCost"}, {name: "Stamina Cost", sort: "staminaCost"}]}
+      sortableFields={[
+        {name: "Action Type", sort: "type", minWidthRem: 8},
+        {name: "Action Point Cost", sort: "actionPointCost", minWidthRem: 10},
+        {name: "Stamina Cost", sort: "staminaCost", minWidthRem: 8}
+      ]}
       filterableFields={[{name: "Action Type", sort: "type"}]}
     />
   );
